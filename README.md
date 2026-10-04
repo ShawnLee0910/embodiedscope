@@ -8,9 +8,11 @@ Affiliations: Westlake University; Alibaba Token Hub, Alibaba Group.
 
 *Equal contribution.
 
-[Paper PDF](https://openreview.net/pdf?id=UGgL1Y5eSK)
+- Paper PDF: Coming soon
+- Code: Coming soon
+- Dataset: Coming soon
 
-This repository contains the static project website and research display assets. It is not the benchmark implementation or raw evaluation dataset. Code and data release links will be added when available.
+This repository contains the static project website and research display assets. It is not the benchmark implementation or raw evaluation dataset. Paper PDF, code, and dataset release links will be added when available.
 
 ## Website
 
