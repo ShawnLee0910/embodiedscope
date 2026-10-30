@@ -1,0 +1,350 @@
+{
+  "source": "Public manuscript tables, checked against the current RoboWeave working manuscript",
+  "snapshot_date": "2026-10-30",
+  "columns": [
+    "L0",
+    "L1-A",
+    "L1-M",
+    "L1-P",
+    "L1-V",
+    "L2"
+  ],
+  "task_counts": [
+    100,
+    30,
+    30,
+    30,
+    30,
+    20
+  ],
+  "success_rate_unit": "percent",
+  "action_steps_unit": "recorded action decisions",
+  "success_rates": [
+    {
+      "id": "astra-base",
+      "model": "GPT-6 Astra",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        88,
+        90,
+        66.67,
+        86.67,
+        73.33,
+        30
+      ]
+    },
+    {
+      "id": "astra-codex",
+      "model": "GPT-6 Astra",
+      "harness": "Codex",
+      "kind": "agent",
+      "values": [
+        95,
+        90,
+        90,
+        76.67,
+        83.33,
+        55
+      ]
+    },
+    {
+      "id": "sol-base",
+      "model": "GPT-5.6 Sol",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        69,
+        70,
+        43.33,
+        30,
+        26.67,
+        30
+      ]
+    },
+    {
+      "id": "sol-codex",
+      "model": "GPT-5.6 Sol",
+      "harness": "Codex",
+      "kind": "agent",
+      "values": [
+        71,
+        73.33,
+        70,
+        33.33,
+        26.67,
+        25
+      ]
+    },
+    {
+      "id": "opus-claude",
+      "model": "Opus 5.5",
+      "harness": "Claude Code",
+      "kind": "agent",
+      "values": [
+        89,
+        90,
+        86.67,
+        60,
+        56.67,
+        35
+      ]
+    },
+    {
+      "id": "gemini-base",
+      "model": "Gemini-3.8-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        51,
+        80,
+        66.67,
+        43.33,
+        33.33,
+        20
+      ]
+    },
+    {
+      "id": "deepseek-base",
+      "model": "DeepSeek-V4.1-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        57,
+        63.33,
+        36.67,
+        33.33,
+        40,
+        15
+      ]
+    },
+    {
+      "id": "glm-base",
+      "model": "GLM-5.3-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        52,
+        53.33,
+        36.67,
+        23.33,
+        46.67,
+        15
+      ]
+    },
+    {
+      "id": "qwen-max-base",
+      "model": "Qwen3.8-Max",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        47,
+        63.33,
+        33.33,
+        53.33,
+        50,
+        25
+      ]
+    },
+    {
+      "id": "qwen-27b-base",
+      "model": "Qwen3.8-27B",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        39,
+        50,
+        10,
+        13.33,
+        16.67,
+        20
+      ]
+    },
+    {
+      "id": "human-average",
+      "model": "Human (average)",
+      "harness": "—",
+      "kind": "human",
+      "values": [
+        91,
+        82.22,
+        85.56,
+        81.11,
+        91.11,
+        93.33
+      ]
+    },
+    {
+      "id": "human-best3",
+      "model": "Human (best of 3)",
+      "harness": "—",
+      "kind": "human",
+      "values": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        95
+      ]
+    }
+  ],
+  "average_action_steps": [
+    {
+      "id": "astra-base",
+      "model": "GPT-6 Astra",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        9.82,
+        15.13,
+        20.8,
+        9.1,
+        13.9,
+        47.65
+      ]
+    },
+    {
+      "id": "astra-codex",
+      "model": "GPT-6 Astra",
+      "harness": "Codex",
+      "kind": "agent",
+      "values": [
+        9.54,
+        16.0,
+        17.97,
+        9.93,
+        13.33,
+        35.75
+      ]
+    },
+    {
+      "id": "sol-base",
+      "model": "GPT-5.6 Sol",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        12.33,
+        26.83,
+        27.13,
+        10.31,
+        18.87,
+        73.2
+      ]
+    },
+    {
+      "id": "sol-codex",
+      "model": "GPT-5.6 Sol",
+      "harness": "Codex",
+      "kind": "agent",
+      "values": [
+        13.3,
+        25.97,
+        26.3,
+        9.7,
+        16.77,
+        64.65
+      ]
+    },
+    {
+      "id": "opus-claude",
+      "model": "Opus 5.5",
+      "harness": "Claude Code",
+      "kind": "agent",
+      "values": [
+        8.98,
+        18.6,
+        22.97,
+        10.2,
+        14.23,
+        28.79
+      ]
+    },
+    {
+      "id": "gemini-base",
+      "model": "Gemini-3.8-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        9.15,
+        23.47,
+        27.23,
+        12.53,
+        20.13,
+        54.1
+      ]
+    },
+    {
+      "id": "deepseek-base",
+      "model": "DeepSeek-V4.1-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        17.01,
+        48.43,
+        27.97,
+        23.73,
+        33.63,
+        48.9
+      ]
+    },
+    {
+      "id": "glm-base",
+      "model": "GLM-5.3-Flash",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        15.17,
+        42.7,
+        25.93,
+        14.93,
+        28.73,
+        57.05
+      ]
+    },
+    {
+      "id": "qwen-max-base",
+      "model": "Qwen3.8-Max",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        16.6,
+        29.53,
+        15.8,
+        12.9,
+        22.23,
+        44.9
+      ]
+    },
+    {
+      "id": "qwen-27b-base",
+      "model": "Qwen3.8-27B",
+      "harness": "Base",
+      "kind": "agent",
+      "values": [
+        16.14,
+        32.93,
+        24.53,
+        14.77,
+        35.73,
+        68.25
+      ]
+    },
+    {
+      "id": "human-steps",
+      "model": "Human",
+      "harness": "—",
+      "kind": "human",
+      "values": [
+        7.32,
+        6.24,
+        13.24,
+        10.02,
+        8.22,
+        55.8
+      ]
+    }
+  ],
+  "l1_mean_definition": "Arithmetic mean of four equally sized L1 subsets. L2 is a separate set of tasks.",
+  "action_steps_note": "Read action steps together with success. Per-episode aggregation awaits raw-data verification."
+}

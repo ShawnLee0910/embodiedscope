@@ -1,14 +1,118 @@
-const $=s=>document.querySelector(s);let metric='sr';const columns=DATA.column_order;const colors=['#2355ce','#2355ce','#088482','#088482','#bc6941','#8752b1','#577e35','#bb547b','#7f69c1','#9a7330'];
-function renderTable(){const rows=DATA[metric+'_rows'];const key=['A','M','V','P'].includes($('#sort').value)?'L1-'+$('#sort').value:$('#sort').value;const ai=rows.filter(r=>!r.name.startsWith('Human')).sort((a,b)=>metric==='sr'?b.values[key]-a.values[key]:a.values[key]-b.values[key]);const humans=rows.filter(r=>r.name.startsWith('Human'));const best=Object.fromEntries(columns.map(k=>[k,(metric==='sr'?Math.max:Math.min)(...ai.map(r=>r.values[k]))]));$('#result-body').innerHTML=[...ai,...humans].map(r=>`<tr class="${r.name.startsWith('Human')?'human':''}"><td>${r.name}</td>${columns.map(k=>`<td class="${metric==='sr'&&!r.name.startsWith('Human')&&r.values[k]===best[k]?'best':''}">${r.display_values[k]}</td>`).join('')}</tr>`).join('');$('#metric-note').textContent=metric==='sr'?'Success rate (%) · higher is better. L0: 100 tasks; each L1 subset: 30; L2: 20.':'Average Action Steps (AAS) · recorded action decisions, not model calls. Read together with success rate. Per-episode aggregation awaits raw-data verification.';document.querySelectorAll('[data-metric]').forEach(b=>{b.classList.toggle('selected',b.dataset.metric===metric);b.setAttribute('aria-pressed',b.dataset.metric===metric)})}
-document.querySelectorAll('[data-metric]').forEach(b=>b.onclick=()=>{metric=b.dataset.metric;renderTable()});$('#sort').onchange=renderTable;
-function chart(){const k='L1-'+$('#chart-axis').value;const rows=DATA.sr_rows.filter(r=>r.kind==='agent_system');let s='<svg viewBox="0 0 960 405" role="img" aria-label="Success rate versus average action decisions for the selected capability"><text x="72" y="26" font-size="13" fill="#526276">Success rate (%)</text>';for(let y=0;y<=100;y+=20){let yy=335-y*2.8;s+=`<line x1="72" y1="${yy}" x2="922" y2="${yy}" stroke="#e4eaf1"/><text x="55" y="${yy+5}" text-anchor="end" fill="#637287" font-size="13">${y}</text>`}for(let x=5;x<=50;x+=5){const xx=72+(x-5)/45*850;s+=`<text x="${xx}" y="358" text-anchor="middle" font-size="13" fill="#637287">${x}</text>`}s+='<text x="497" y="393" text-anchor="middle" font-size="13" fill="#526276">Average action decisions</text>';rows.forEach((r,i)=>{const alias=r.name==='Opus 5.5 + Claude Code'?'Opus 5.5 (Claude Code)':r.name;const a=DATA.aas_rows.find(x=>x.name===alias);const x=72+(a.values[k]-5)/45*850,y=335-r.values[k]*2.8;const tip=`${r.name}: ${r.display_values[k]}% SR, ${a.display_values[k]} steps`;s+=scatterMarker(r,x,y,tip)});s+='</svg>';$('#scatter').innerHTML=s;$('#legend').innerHTML=rows.map((r,i)=>`<span><i style="background:${/Codex|Claude Code/.test(r.name)||r.name.includes('Qwen3.8-Max')?modelColor(r.name):'white'};border:2px solid ${modelColor(r.name)};${r.name.startsWith('Qwen')?'clip-path:polygon(50% 0,0 100%,100% 100%);border-radius:0;':r.name.startsWith('GPT-5.6')?'border-radius:0;':''}"></i>${r.name}</span>`).join('')};$('#chart-axis').onchange=chart;
-const episodes={explore:['ACTIVE INFORMATION ACQUISITION','Find the evidence before acting.','Change viewpoint and position to locate a magazine on the reading-area desk, then move it to the coffee table.'],memory:['MEMORY','Carry the relevant history forward.','Move two milk cartons while retaining information about their original locations across the episode.'],recovery:['VERIFICATION AND RECOVERY','Notice the change. Close it again.','An intervention reopens the microwave after the first closing action. Inspect the resulting state and close it again.'],physics:['PHYSICAL REASONING','Choose a suitable support.','Inspect the available supports, pick up the soap dispenser, and select a physically appropriate support for placement.']};let currentEpisode='explore';function selectEpisode(key){currentEpisode=key;const [label,title,text]=episodes[key];$('#episode-label').textContent=label;$('#episode-title').textContent=title;$('#episode-text').textContent=text;$('#episode-img').src='assets/'+key+'.webp';$('#episode-img').alt=label+' recorded episode trajectory';$('#episode-zoom').dataset.image='assets/'+key+'.webp';$('.episode-image').scrollTop=0;document.querySelectorAll('[data-episode]').forEach(b=>{b.classList.toggle('selected',b.dataset.episode===key);b.setAttribute('aria-pressed',b.dataset.episode===key)})}document.querySelectorAll('[data-episode]').forEach(b=>b.onclick=()=>selectEpisode(b.dataset.episode));document.querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>selectEpisode(b.dataset.select));function zoom(src){$('#lightbox-image').src=src;$('#lightbox-image').classList.remove('native-size');$('#zoom-toggle').textContent='Actual size';const original=document.querySelector('img[src="'+src+'"]');$('#lightbox-image').alt=original?.alt||'Research figure';$('#lightbox-title').textContent=original?.alt||'Research figure';$('#lightbox').showModal()}document.querySelectorAll('[data-image]').forEach(b=>b.onclick=()=>zoom(b.dataset.image));$('#expand-episode').onclick=()=>zoom('assets/'+currentEpisode+'.webp');$('#close-lightbox').onclick=()=>$('#lightbox').close();$('#lightbox').onclick=e=>{if(e.target===$('#lightbox'))$('#lightbox').close()};renderTable();chart();selectEpisode('explore');
-function modelColor(name){if(name.startsWith('GPT-6'))return '#2355ce';if(name.startsWith('GPT-5.6'))return '#088482';if(name.startsWith('Opus'))return '#bc6941';if(name.startsWith('Gemini'))return '#8752b1';if(name.startsWith('DeepSeek'))return '#577e35';if(name.startsWith('GLM'))return '#bb547b';if(name.startsWith('Qwen'))return '#7f69c1';return '#637287'}
-function renderBars(){const key=$('#bar-group').value;const rows=DATA.sr_rows.filter(r=>r.kind==='agent_system').slice().sort((a,b)=>b.values[key]-a.values[key]);$('#bar-chart').innerHTML=rows.map(r=>`<div class="bar-row"><span class="bar-label">${r.name}</span><div class="bar-track" role="img" aria-label="${r.name}: ${r.display_values[key]} percent"><div class="bar-fill ${/Codex|Claude Code/.test(r.name)?'harness':''}" style="width:${r.values[key]}%;background-color:${modelColor(r.name)}"></div></div><span class="bar-value">${r.display_values[key]}%</span></div>`).join('')+'<div class="bar-axis"><span></span><div class="bar-ticks"><span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span></div><span></span></div>';$('#bar-reference').textContent=DATA.sr_rows.filter(r=>r.kind==='human').map(r=>`${r.name}: ${r.display_values[key]}%`).join(' · ')}
-function renderHeat(){const ks=['L1-A','L1-M','L1-V','L1-P'];$('#heatmap').innerHTML='<table><thead><tr><th>Model / system</th><th>A</th><th>M</th><th>V</th><th>P</th></tr></thead><tbody>'+DATA.sr_rows.filter(r=>r.kind==='agent_system').map(r=>'<tr><td>'+r.name+'</td>'+ks.map(k=>{let t=r.values[k]/100;let rgb=[240+(23-240)*t,245+(72-245)*t,255+(189-255)*t].map(Math.round);return `<td style="background:rgb(${rgb.join(',')});color:${heatText(rgb)}" aria-label="${r.name}, ${k}: ${r.display_values[k]} percent">${r.display_values[k]}</td>`}).join('')+'</tr>').join('')+'</tbody></table>'}
-$('#bar-group').onchange=renderBars;renderBars();renderHeat();
+/* Original RoboWeave homepage. No dependencies or analytics. */
+(() => {
+  'use strict';
+  const data = window.ROBO_WEAVE_DATA;
+  if (!data) return;
+  const $ = (selector) => document.querySelector(selector);
+  const root = document.documentElement;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const readPreference = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
+  const savePreference = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Private browsing is supported. */ } };
+  const setTheme = (theme) => {
+    root.dataset.theme = theme;
+    const next = theme === 'dark' ? 'light' : 'dark';
+    $('#theme-toggle').setAttribute('aria-label', `Switch to ${next} theme`);
+    $('meta[name="theme-color"]').content = theme === 'dark' ? '#0b1018' : '#f8f9fc';
+  };
+  setTheme(readPreference('roboweave-theme') === 'light' ? 'light' : 'dark');
+  $('#theme-toggle').addEventListener('click', () => { const theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(theme); savePreference('roboweave-theme', theme); });
 
-function heatText(rgb){const L=rgb.map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);return (L+.05)/.05>=1.05/(L+.05)?'#000':'#fff'}
-$('#zoom-toggle').onclick=()=>{const im=$('#lightbox-image');im.classList.toggle('native-size');$('#zoom-toggle').textContent=im.classList.contains('native-size')?'Fit to screen':'Actual size'};
+  const tabs = [...document.querySelectorAll('[data-cap]')];
+  let currentCapability = 'A';
+  const episodeImage = $('#episode-image');
+  function selectCapability(key, focus = false) {
+    const cap = data.capabilities[key];
+    if (!cap) return;
+    currentCapability = key;
+    tabs.forEach((tab) => { const active = tab.dataset.cap === key; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; if (active && focus) tab.focus(); });
+    $('#capability-panel').setAttribute('aria-labelledby', `tab-${key.toLowerCase()}`);
+    $('#episode-category').textContent = cap.category;
+    $('#episode-title').textContent = cap.title;
+    $('#episode-description').textContent = cap.description;
+    $('#episode-demand').textContent = cap.demand;
+    $('#episode-media-label').textContent = cap.label;
+    episodeImage.src = cap.image;
+    episodeImage.alt = cap.alt;
+    episodeImage.width = cap.width;
+    episodeImage.height = cap.height;
+    $('#episode-scroll').scrollTop = 0;
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectCapability(tab.dataset.cap));
+    tab.addEventListener('keydown', (event) => {
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== undefined) { event.preventDefault(); selectCapability(tabs[next].dataset.cap, true); }
+    });
+  });
+  const dialog = $('#episode-dialog');
+  document.querySelectorAll('.episode-open').forEach((button) => button.addEventListener('click', () => {
+    const cap = data.capabilities[currentCapability];
+    $('#dialog-title').textContent = cap.name;
+    $('#dialog-description').textContent = cap.description;
+    const img = $('#dialog-image'); img.src = cap.image; img.alt = cap.alt; img.width = cap.width; img.height = cap.height;
+    dialog.showModal(); dialog.scrollTop = 0; document.body.style.overflow = 'hidden';
+  }));
+  $('#dialog-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
+  dialog.addEventListener('close', () => { document.body.style.overflow = ''; });
 
-function scatterMarker(r,x,y,tip){const c=modelColor(r.name),fill=/Codex|Claude Code/.test(r.name)?c:'white';const attrs=`tabindex="0" aria-label="${tip}" fill="${fill}" stroke="${c}" stroke-width="2.5" opacity=".88"`;if(r.name.startsWith('Qwen')){const f=r.name.includes('Max')?c:'white';return `<polygon ${attrs} style="fill:${f}" points="${x},${y-9} ${x-9},${y+8} ${x+9},${y+8}"><title>${tip}</title></polygon>`}if(r.name.startsWith('GPT-5.6'))return `<rect ${attrs} x="${x-7}" y="${y-7}" width="14" height="14"><title>${tip}</title></rect>`;return `<circle ${attrs} cx="${x}" cy="${y}" r="8"><title>${tip}</title></circle>`}
+  const select = $('#model-select');
+  data.results.filter((row) => row.kind === 'agent').forEach((row) => { const option = document.createElement('option'); option.value = row.id; option.textContent = row.harness === 'Base' ? `${row.model} · Base` : `${row.model} + ${row.harness}`; select.append(option); });
+  function updateChart(id) {
+    const row = data.results.find((item) => item.id === id);
+    if (!row) return;
+    const label = row.harness === 'Base' ? `${row.model} · Base` : `${row.model} + ${row.harness}`;
+    const l1 = row.values.slice(1,5).reduce((a,b) => a+b,0)/4;
+    const values = {l0:row.values[0],l1,l2:row.values[5]};
+    $('#chart-model-title').textContent = label;
+    Object.entries(values).forEach(([key,value]) => { $(`#bar-${key}`).style.setProperty('--value', `${value}%`); $(`#value-${key}`).textContent = `${value.toFixed(1)}%`; });
+    $('#stage-chart').setAttribute('aria-label', `${label}. Success rate: L0 ${values.l0.toFixed(1)}%, L1 mean ${l1.toFixed(1)}%, L2 ${values.l2.toFixed(1)}%.`);
+    document.querySelectorAll('[data-result]').forEach((tr) => tr.classList.toggle('selected-result', tr.dataset.result === id));
+  }
+  select.value = 'astra-codex'; updateChart(select.value);
+  select.addEventListener('change', () => updateChart(select.value));
+
+  // Content stays visible if animation support or JavaScript initialization fails.
+  if ('IntersectionObserver' in window) {
+    root.classList.add('js');
+    const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); reveal.unobserve(entry.target); } }), {threshold:0.08});
+    document.querySelectorAll('.reveal').forEach((element) => reveal.observe(element));
+    const navObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { document.querySelectorAll('.nav-links a').forEach((link) => { if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }); } }), {rootMargin:'-15% 0px -55% 0px'});
+    ['overview','benchmark','episodes','results','real-robot','resources'].forEach((id) => navObserver.observe(document.getElementById(id)));
+  }
+  let scrollPending = false;
+  function updateProgress() { const total = root.scrollHeight - innerHeight; $('#reading-progress').style.transform = `scaleX(${total > 0 ? Math.min(1,scrollY/total) : 0})`; scrollPending = false; }
+  addEventListener('scroll', () => { if (!scrollPending) { scrollPending = true; requestAnimationFrame(updateProgress); } }, {passive:true});
+  updateProgress();
+
+  // A light, original weave animation echoes the four capability strands.
+  const canvas = $('#weave-canvas');
+  const context = canvas.getContext('2d');
+  let width = 0, height = 0, frame = 0, phase = 0;
+  let paused = reducedMotion.matches || readPreference('roboweave-motion') === 'paused';
+  const resize = () => { const dpr = Math.min(devicePixelRatio || 1,2); width = canvas.clientWidth; height = canvas.clientHeight; canvas.width = width*dpr; canvas.height = height*dpr; if (context) context.setTransform(dpr,0,0,dpr,0,0); draw(); };
+  function draw() {
+    if (!context) return;
+    context.clearRect(0,0,width,height);
+    const light = root.dataset.theme === 'light';
+    const colors = light ? ['#2469a512','#a7602b12','#8055ae0c','#24745e0c'] : ['#79bdff14','#ffaf7212','#baadff0e','#8ed7bb0c'];
+    for (let strand=0;strand<4;strand++) {
+      context.beginPath();
+      for (let x=width*.35;x<=width+8;x+=8) { const progress=x/width; const y=height*.51 + Math.sin(progress*8+phase+strand*1.2)*(45+strand*24)+Math.cos(progress*4+strand)*height*.13; x===width*.35 ? context.moveTo(x,y) : context.lineTo(x,y); }
+      context.strokeStyle=colors[strand]; context.lineWidth=1; context.stroke();
+    }
+    for(let i=0;i<32;i++){const x=((i*137.5)%1000)/1000*width;const y=((i*83.7)%700)/700*height;context.fillStyle=light?'#4a699322':'#b2d7ff35';context.beginPath();context.arc(x,y,i%5===0?1:.55,0,Math.PI*2);context.fill();}
+  }
+  function animate() { frame=0; if (paused || document.hidden || !context) return; phase+=0.002;draw();frame=requestAnimationFrame(animate); }
+  function syncMotion() { document.body.classList.toggle('motion-paused',paused);$('#motion-toggle').setAttribute('aria-pressed',String(paused));$('#motion-label').textContent=paused?'Resume motion':'Pause motion';$('#motion-symbol').textContent=paused?'▷':'Ⅱ';if(frame)cancelAnimationFrame(frame);frame=0;draw();if(!paused&&!document.hidden)frame=requestAnimationFrame(animate); }
+  $('#motion-toggle').addEventListener('click',()=>{paused=!paused;savePreference('roboweave-motion',paused?'paused':'playing');syncMotion();});
+  reducedMotion.addEventListener('change',()=>{paused=reducedMotion.matches;syncMotion();});
+  document.addEventListener('visibilitychange',syncMotion);
+  new MutationObserver(draw).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  addEventListener('resize',()=>{resize();updateProgress();});
+  resize();syncMotion();
+})();
