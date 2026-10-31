@@ -30,7 +30,7 @@ if (stage && pin && canvas && !reduced.matches) {
 
 function start() {
   const renderer = new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 700 ? 1.35 : 1.75));
+  renderer.setPixelRatio(1);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -273,6 +273,9 @@ function start() {
   function resize(){
     mobile=innerWidth<700;
     const width=pin.clientWidth,height=pin.clientHeight;
+    // Keep the drawing buffers bounded on large, high-density displays.
+    const pixelRatio=Math.min(devicePixelRatio||1,mobile?1.25:1.5,Math.sqrt(1800000/Math.max(1,width*height)));
+    renderer.setPixelRatio(pixelRatio);composer.setPixelRatio(pixelRatio);
     renderer.setSize(width,height,false);composer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();
     update();draw(current);
   }
@@ -281,6 +284,14 @@ function start() {
   chapterButtons.forEach(button=>button.addEventListener('click',()=>scrollToProgress(jumpPositions[Number(button.dataset.storyTo)])));
   stage.querySelector('#story-replay')?.addEventListener('click',()=>scrollToProgress(0));
   document.querySelectorAll('a[href="#home"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();scrollToProgress(.96);history.replaceState(null,'','#home');}));
+  document.querySelectorAll('a[href^="#"]:not([href="#home"])').forEach(link=>link.addEventListener('click',event=>{
+    if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    const destination=document.getElementById(link.hash.slice(1));
+    if(!destination)return;
+    event.preventDefault();
+    scrollTo({top:scrollY+destination.getBoundingClientRect().top-offsetTop()-20,behavior:reduced.matches?'auto':'smooth'});
+    history.pushState(null,'',link.hash);
+  }));
   addEventListener('scroll',update,{passive:true});addEventListener('resize',resize,{passive:true});
   document.addEventListener('visibilitychange',()=>{lastTime=0;requestDraw();});
   const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastTime=0;update();}else if(raf){cancelAnimationFrame(raf);raf=0;}},{rootMargin:'100px'});observer.observe(stage);
