@@ -24,3 +24,18 @@ html{scroll-padding-top:76px}body{font-size:16.5px;line-height:1.7}.wrap{width:m
 .title-sheet h1>span:first-child{color:#f0f5fc}
 .episode-info{padding:32px}.episode-info h3{font-size:28px;line-height:1.25}.episode-info>p{font-size:15px;line-height:1.8}.episode-info .episode-source{font-size:11px}.episode-info .diagnostic-note{font-size:11px}.episode-info .diagnostic-note p{font-size:14px}.episode-image-scroll{height:490px}.media-toolbar,.media-bottom{font-size:11px}.results-grid{gap:38px}.results-story h3{font-size:26px}.results-story>p{font-size:15px;line-height:1.8}.finding-number{font-size:57px}.finding p{font-size:13px}.finding small{font-size:10px}.chart-panel{padding:28px;border-radius:12px}.chart-top h3{font-size:22px}.chart-unit,.chart-scale{font-size:11px}.select-label{font-size:11px}.chart-bar-row{font-size:13px}.chart-bar-row strong{font-size:14px}.results-details summary{font-size:15px;padding:22px 0}.summary-meta{font-size:11px}.results-details table th{font-size:11px}.results-details table td{font-size:13px;padding:13px 12px}.results-details table th:first-child,.results-details table td:first-child{min-width:170px}.results-details table th:nth-child(2),.results-details table td:nth-child(2){font-size:11px}.download-data{font-size:12px}.gallery-banner h3{font-size:23px}
 @media(max-width:700px){.episode-info{padding:23px}.episode-info h3{font-size:26px}.episode-info>p{font-size:14px}.episode-info .diagnostic-note p{font-size:13px}.episode-info .episode-source{font-size:11px}.episode-image-scroll{height:420px}.media-toolbar,.media-bottom{font-size:10px}.results-grid{gap:25px}.results-story h3{font-size:24px}.results-story>p{font-size:14px}.finding-number{font-size:48px}.finding p{font-size:12px}.chart-panel{padding:21px}.chart-top h3{font-size:20px}.results-details summary{font-size:14px}.summary-meta{font-size:10px}.results-details table td{font-size:12px}.gallery-banner h3{font-size:23px}}
+
+/* Soft studio atmosphere and a restrained blue-to-amber title finish. */
+.intro-pin{background:radial-gradient(ellipse at 72% 48%,#16344e88, #10203240 31%,transparent 64%),radial-gradient(ellipse at 92% 62%,#7b452028,transparent 45%),#070e14}
+.story-caption h2{font-weight:500;letter-spacing:-.035em}
+.story-caption .chapter-kicker{font-weight:550;letter-spacing:.16em}
+@media(min-width:701px){.intro-shade{background:linear-gradient(0deg,#070e14 0%,transparent 24%,transparent 92%,#070e1440),linear-gradient(90deg,#070e14e6 0%,#070e14b3 29%,#070e1438 52%,transparent 72%)}}
+.title-sheet h1{font-weight:640;letter-spacing:-.06em}
+.title-sheet .paper-name{color:#cadce9;letter-spacing:-.02em}
+.title-sheet h1>span:last-child{color:#b8d8f8}
+@supports(background-clip:text){.title-sheet h1>span:last-child{background:linear-gradient(110deg,#99ccff 5%,#bbdcfa 62%,#ffd0a5 100%);background-clip:text;-webkit-background-clip:text;color:transparent}}
+.title-actions a{box-shadow:0 4px 24px #79bdff12}
+.story-rail button{transition:background .18s,color .18s,border-color .18s;letter-spacing:.04em}
+.story-rail [data-story-to="1"]{--step-color:#92ceff}.story-rail [data-story-to="2"]{--step-color:#c1afff}.story-rail [data-story-to="3"]{--step-color:#ffb17b}.story-rail [data-story-to="4"]{--step-color:#9ce5cf}
+.story-rail button.is-active{color:var(--step-color,#dceeff);border-color:color-mix(in srgb,var(--step-color,#a4d1ff) 45%,transparent);background:color-mix(in srgb,var(--step-color,#a4d1ff) 10%,transparent);box-shadow:inset 0 0 14px color-mix(in srgb,var(--step-color,#a4d1ff) 7%,transparent)}
+@media(prefers-reduced-motion:reduce){.story-rail button{transition:none}}

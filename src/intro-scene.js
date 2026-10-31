@@ -40,23 +40,23 @@ function start() {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const env = pmrem.fromScene(environment, .035);
   scene.environment = env.texture;
-  scene.environmentIntensity = .45;
+  scene.environmentIntensity = .38;
   environment.dispose(); pmrem.dispose();
 
   scene.add(new THREE.HemisphereLight(0xbacfff,0x16202e,.65));
   function light(color,power,x,y,z) { const l = new THREE.DirectionalLight(color,power);l.position.set(x,y,z);scene.add(l);return l; }
-  light(0xf3f7ff,2.2,3,5,5);
+  light(0xf3f7ff,2.0,3,5,5);
   light(0x388fff,2.5,-4,1,-2);
   light(0xff974c,2.5,4,1,-1);
   light(0xc6d8ff,.5,0,-2,4);
 
-  const shell = new THREE.MeshPhysicalMaterial({color:0xdce6f3,metalness:.22,roughness:.22,clearcoat:1,clearcoatRoughness:.18});
-  const white = new THREE.MeshPhysicalMaterial({color:0xf2f5fa,metalness:.16,roughness:.19,clearcoat:1});
-  const navy = new THREE.MeshPhysicalMaterial({color:0x071728,metalness:.58,roughness:.22,clearcoat:1});
-  const visorMaterial = new THREE.MeshPhysicalMaterial({color:0x10263d,metalness:.45,roughness:.12,clearcoat:1,clearcoatRoughness:.07});
-  const eyeMaterial = new THREE.MeshStandardMaterial({color:0xe2f7ff,emissive:0x97d5ff,emissiveIntensity:2.2,roughness:.25});
-  const blue = new THREE.MeshPhysicalMaterial({color:0x1479ee,metalness:.58,roughness:.23,clearcoat:1,clearcoatRoughness:.12});
-  const orange = new THREE.MeshPhysicalMaterial({color:0xff8232,metalness:.36,roughness:.24,clearcoat:1,clearcoatRoughness:.13});
+  const shell = new THREE.MeshPhysicalMaterial({color:0xdce6f3,metalness:.14,roughness:.29,clearcoat:.7,clearcoatRoughness:.24});
+  const white = new THREE.MeshPhysicalMaterial({color:0xf2f5fa,metalness:.10,roughness:.27,clearcoat:.75,clearcoatRoughness:.23});
+  const navy = new THREE.MeshPhysicalMaterial({color:0x071728,metalness:.42,roughness:.30,clearcoat:.65});
+  const visorMaterial = new THREE.MeshPhysicalMaterial({color:0x0b2238,metalness:.28,roughness:.20,clearcoat:.8,clearcoatRoughness:.16});
+  const eyeMaterial = new THREE.MeshStandardMaterial({color:0xc8e8ff,emissive:0x80c6ff,emissiveIntensity:1.9,roughness:.35});
+  const blue = new THREE.MeshPhysicalMaterial({color:0x126ee5,metalness:.30,roughness:.29,clearcoat:.9,clearcoatRoughness:.21});
+  const orange = new THREE.MeshPhysicalMaterial({color:0xfb7d31,metalness:.22,roughness:.30,clearcoat:.9,clearcoatRoughness:.21});
   const robot = new THREE.Group();
   scene.add(robot);
   function rounded(parent,size,position,material,radius=.14) {
@@ -77,7 +77,7 @@ function start() {
   const head = new THREE.Group(); head.position.set(0,1.43,0);robot.add(head);
   rounded(head,[1.53,1.02,.91],[0,0,0],white,.30);
   rounded(head,[1.30,.74,.22],[0,-.01,.427],visorMaterial,.25);
-  const eyes = [-1,1].map(side => rounded(head,[.125,.30,.07],[side*.32,.01,.564],eyeMaterial,.058));
+  const eyes = [-1,1].map(side => rounded(head,[.125,.30,.13],[side*.32,.01,.564],eyeMaterial,.060));
   rounded(head,[.26,.035,.025],[0,-.205,.554],eyeMaterial,.015);
   rounded(head,[1.14,.12,.69],[0,.51,-.02],shell,.055);
   [-1,1].forEach(side => {
@@ -93,20 +93,28 @@ function start() {
   cylinder(robot,.28,.12,[0,-.46,0],navy);
 
   // A beveled ribbon is a solid mesh, rather than a line laid on top of the scene.
-  const segments = 220, cross = 12;
+  const segments = 220, cross = 16;
   function makeRibbon(index,material,width) {
-    const positions = new Float32Array((segments+1)*cross*3);
+    const bodyVertices=(segments+1)*cross;
+    const positions = new Float32Array((bodyVertices+cross*2)*3);
     const indices = [];
     for(let i=0;i<segments;i++)for(let j=0;j<cross;j++){
       const a=i*cross+j,b=i*cross+(j+1)%cross,c=(i+1)*cross+j,d=(i+1)*cross+(j+1)%cross;
       indices.push(a,b,c,b,d,c);
+    }
+    const surfaceCount=indices.length;
+    // Duplicate the two end rings so the free ends have clean, flat caps.
+    for(let cap=0;cap<2;cap++)for(let j=1;j<cross-1;j++){
+      const base=bodyVertices+cap*cross;
+      if(cap===0)indices.push(base,base+j+1,base+j);
+      else indices.push(base,base+j,base+j+1);
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
     geometry.setIndex(indices);
     const mesh = new THREE.Mesh(geometry,material);mesh.frustumCulled=false;
     robot.add(mesh);
-    return {index,mesh,geometry,positions,width};
+    return {index,mesh,geometry,positions,width,bodyVertices,surfaceCount};
   }
   const ribbons = [makeRibbon(0,blue,.29),makeRibbon(1,orange,.29)];
   const p0 = new THREE.Vector3(), p1 = new THREE.Vector3(), tangent = new THREE.Vector3(), normal = new THREE.Vector3(), binormal = new THREE.Vector3();
@@ -125,7 +133,7 @@ function start() {
     if(Math.abs(lastClosure-closure)<.00015)return;
     lastClosure=closure;
     for(const ribbon of ribbons){
-      const {index,positions,geometry,width}=ribbon;
+      const {index,positions,geometry,width,bodyVertices,surfaceCount}=ribbon;
       for(let i=0;i<=segments;i++){
         const t=i/segments*Math.PI*2;
         path(t,index,closure,p0);path(t+.001,index,closure,p1);
@@ -143,8 +151,20 @@ function start() {
           positions[k+2]=p0.z+normal.z*n+binormal.z*b;
         }
       }
+      positions.set(positions.subarray(0,cross*3),bodyVertices*3);
+      positions.set(positions.subarray(segments*cross*3,(segments+1)*cross*3),(bodyVertices+cross)*3);
+      geometry.setDrawRange(0,closure>.9995?surfaceCount:geometry.index.count);
       geometry.attributes.position.needsUpdate=true;
       geometry.computeVertexNormals();
+      if(closure>.9995){
+        const normals=geometry.attributes.normal;
+        for(let j=0;j<cross;j++){
+          const last=segments*cross+j;
+          normal.set(normals.getX(j)+normals.getX(last),normals.getY(j)+normals.getY(last),normals.getZ(j)+normals.getZ(last)).normalize();
+          normals.setXYZ(j,normal.x,normal.y,normal.z);normals.setXYZ(last,normal.x,normal.y,normal.z);
+        }
+        normals.needsUpdate=true;
+      }
     }
   }
 
@@ -154,14 +174,15 @@ function start() {
   for(let j=0;j<4;j++){
     const pts=[];
     for(let i=0;i<=160;i++){
-      const u=i/160, angle=u*Math.PI*3.5+j*Math.PI/2;
-      const radius=2.8-u*1.1;
-      pts.push(new THREE.Vector3(Math.cos(angle)*radius,(u-.5)*2.7+.65,Math.sin(angle)*radius));
+      const u=i/160, angle=u*Math.PI*2.1+j*Math.PI/2;
+      const radius=2.5-u*.8;
+      pts.push(new THREE.Vector3(Math.cos(angle)*radius,(u-.5)*1.85+.15,Math.sin(angle)*radius));
     }
     const geometry=new THREE.BufferGeometry().setFromPoints(pts);
     const material=new THREE.LineBasicMaterial({color:threadColors[j],transparent:true,opacity:0});
     const line=new THREE.Line(geometry,material);robot.add(line);
-    const dot=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),new THREE.MeshBasicMaterial({color:threadColors[j]}));robot.add(dot);
+    const dotMaterial=new THREE.MeshBasicMaterial({color:threadColors[j]});dotMaterial.color.multiplyScalar(1.45);
+    const dot=new THREE.Mesh(new THREE.SphereGeometry(.026,16,10),dotMaterial);robot.add(dot);
     threads.push({line,dot,pts});
   }
 
@@ -174,7 +195,7 @@ function start() {
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene,camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1,1),.17,.38,2.3);composer.addPass(bloom);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1,1),.14,.38,2.1);composer.addPass(bloom);
   composer.addPass(new OutputPass());
   stage.classList.remove('story-static');stage.classList.add('story-live');
   const captions=[...stage.querySelectorAll('[data-story-chapter]')];
@@ -188,38 +209,38 @@ function start() {
   let target=0, current=0, raf=0, visible=true, lastTime=0;
   let mobile=innerWidth<700;
   const beatCenters=[.025,.19,.365,.54,.695];
-  const cameraKeys=[
-    [0,[.55,1.55,3.15],[.2,1.12,0]],
-    [.18,[2.9,1.50,5.40],[.1,.65,0]],
-    [.37,[-2.60,2.25,5.80],[0,.62,0]],
-    [.57,[-.70,1.32,6.90],[0,.65,0]],
-    [.74,[0,1.15,7.80],[0,.65,0]],
-    [1,[0,1.20,7.8],[0,.65,0]]
-  ];
+  // A continuous camera path avoids braking at every capability chapter.
+  const cameraCurve=new THREE.CatmullRomCurve3([
+    new THREE.Vector3(.55,1.55,3.15),new THREE.Vector3(2.10,1.75,5.05),
+    new THREE.Vector3(-1.75,2.05,6.10),new THREE.Vector3(-.5,1.35,7.0),new THREE.Vector3(0,1.20,7.8)
+  ],false,'centripetal');
+  const lookCurve=new THREE.CatmullRomCurve3([
+    new THREE.Vector3(.2,1.12,0),new THREE.Vector3(.1,.8,0),
+    new THREE.Vector3(0,.7,0),new THREE.Vector3(0,.65,0),new THREE.Vector3(0,.65,0)
+  ],false,'centripetal');
   const look=new THREE.Vector3();
   function draw(p) {
     const closure=smooth(.04,.62,p);
-    const titleReveal=smooth(.73,.86,p);
+    const titleReveal=smooth(.70,.825,p);
+    const activeChapter=p>.76?5:beatCenters.reduce((best,v,i)=>Math.abs(v-p)<Math.abs(beatCenters[best]-p)?i:best,0);
     updateRibbons(closure);
     robot.rotation.y=mix(-.10,.06,smooth(0,.66,p));
     robot.rotation.z=.015*Math.sin(p*Math.PI*3)*(1-titleReveal);
     const shortPhone=mobile&&pin.clientHeight<650;
+    const mobileOpening=1-smooth(0,.22,p);
     const endScale=mobile?(shortPhone?.22:.28):.25;
-    const scale=mix(mobile?.8:1,endScale,titleReveal);robot.scale.setScalar(scale);
+    const scale=mix(mobile?.8-.07*mobileOpening:1,endScale,titleReveal);robot.scale.setScalar(scale);
     robot.position.set(mix(mobile?0:.8,0,titleReveal),mix(mobile?.94:0,mobile?(shortPhone?3.55:3.35):2.13,titleReveal),0);
     head.rotation.y=.12*Math.sin(p*9)*(1-titleReveal);
     head.rotation.x=-.035+.05*Math.sin(p*8);
     eyes.forEach((eye,i)=>eye.scale.y=1-.08*Math.sin(p*8+i*.3));
-    let a=cameraKeys[0],b=cameraKeys[1];
-    for(let i=0;i<cameraKeys.length-1;i++)if(p>=cameraKeys[i][0]){a=cameraKeys[i];b=cameraKeys[i+1];}
-    const t=smooth(a[0],b[0],p);
-    camera.position.fromArray(a[1]).lerp(new THREE.Vector3(...b[1]),t);
-    look.fromArray(a[2]).lerp(new THREE.Vector3(...b[2]),t);
-    if(mobile){camera.position.z*=1.40;camera.position.x*=.64;camera.fov=40;}else camera.fov=35;
+    const cameraProgress=smooth(0,.74,p);
+    cameraCurve.getPoint(cameraProgress,camera.position);lookCurve.getPoint(cameraProgress,look);
+    if(mobile){camera.position.z*=1.4+.08*mobileOpening;camera.position.x*=.64;look.x=0;camera.fov=40;}else camera.fov=35;
     camera.lookAt(look);camera.updateProjectionMatrix();
     for(let j=0;j<threads.length;j++){
       const thread=threads[j];const arrival=smooth(.08+j*.12,.28+j*.12,p)*(1-titleReveal);
-      thread.line.material.opacity=arrival*.48;
+      thread.line.material.opacity=arrival*(activeChapter===j+1?.32:.12);
       const travel=clamp((p-.04-j*.1)/.52);
       const index=Math.floor(travel*160);
       thread.line.geometry.setDrawRange(0,Math.max(2,index+1));
@@ -235,22 +256,23 @@ function start() {
       caption.style.transform=`translateY(${(1-opacity)*18}px)`;
       caption.setAttribute('aria-hidden',opacity<.4?'true':'false');
     });
-    const titleIn=smooth(.73,.80,p);
+    const titleIn=smooth(.755,.81,p);
     title.style.opacity=String(titleIn);
-    title.style.pointerEvents=p>.81?'auto':'none';
-    title.inert=p<.81;
+    title.style.pointerEvents=p>.87?'auto':'none';
+    title.inert=p<.87;
     wordItems.forEach((item,i)=>{
-      const reveal=smooth(.75+i*.008,.815+i*.008,p);
+      const start=i<2?.765+i*.01:.805+(i-2)*.0035;
+      const reveal=smooth(start,start+.06,p);
       item.style.opacity=String(reveal);
-      item.style.transform=`translateY(${(1-reveal)*32}px)`;
-      item.style.filter=`blur(${(1-reveal)*7}px)`;
+      item.style.transform=`translateY(${(1-reveal)*26}px)`;
+      item.style.filter=`blur(${(1-reveal)*4}px)`;
     });
     titleGroups.forEach((item,i)=>{
-      const reveal=smooth(.81+i*.024,.865+i*.024,p);
+      const start=.875+i*.016;
+      const reveal=smooth(start,start+.045,p);
       item.style.opacity=String(reveal);
       item.style.transform=`translateY(${(1-reveal)*22}px)`;
     });
-    const activeChapter=p>.76?5:beatCenters.reduce((best,v,i)=>Math.abs(v-p)<Math.abs(beatCenters[best]-p)?i:best,0);
     chapterButtons.forEach(button=>{const on=Number(button.dataset.storyTo)===activeChapter;button.classList.toggle('is-active',on);if(on)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');});
     progressBar.style.transform=`scaleX(${p})`;
     hint.style.opacity=String(1-smooth(.025,.1,p));
@@ -280,10 +302,10 @@ function start() {
     update();draw(current);
   }
   function scrollToProgress(p){const rect=stage.getBoundingClientRect();scrollTo({top:scrollY+rect.top-offsetTop()+(rect.height-pin.offsetHeight)*p,behavior:reduced.matches?'auto':'smooth'});}
-  const jumpPositions=[0,.19,.365,.54,.695,.96];
+  const jumpPositions=[0,.19,.365,.54,.695,.985];
   chapterButtons.forEach(button=>button.addEventListener('click',()=>scrollToProgress(jumpPositions[Number(button.dataset.storyTo)])));
   stage.querySelector('#story-replay')?.addEventListener('click',()=>scrollToProgress(0));
-  document.querySelectorAll('a[href="#home"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();scrollToProgress(.96);history.replaceState(null,'','#home');}));
+  document.querySelectorAll('a[href="#home"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();scrollToProgress(.985);history.replaceState(null,'','#home');}));
   document.querySelectorAll('a[href^="#"]:not([href="#home"])').forEach(link=>link.addEventListener('click',event=>{
     if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
     const destination=document.getElementById(link.hash.slice(1));
@@ -298,5 +320,5 @@ function start() {
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;if(raf)cancelAnimationFrame(raf);fallback();});
   reduced.addEventListener('change',()=>{if(reduced.matches){active=false;if(raf)cancelAnimationFrame(raf);fallback();title.inert=false;}});
   resize();current=target;draw(current);
-  if(location.hash==='#home')scrollToProgress(.96);
+  if(location.hash==='#home')scrollToProgress(.985);
 }
