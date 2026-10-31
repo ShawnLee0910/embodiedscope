@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1018">
+  <meta name="theme-color" content="#081116">
   <title>RoboWeave: Benchmarking the Interplay of Agentic Capabilities in Embodied Tasks</title>
   <meta name="description" content="RoboWeave evaluates how information acquisition, memory, physical reasoning, and verification work together across 240 interactive embodied household tasks.">
   <meta property="og:title" content="RoboWeave — Embodied capabilities, woven together.">
@@ -22,10 +22,12 @@
   <meta name="citation_author" content="Yaochu Jin">
   <link rel="icon" type="image/png" href="assets/brand/roboweave.png">
   <link rel="stylesheet" href="style.css?v=20261030">
-  <link rel="stylesheet" href="research.css?v=20261030">
+  <link rel="stylesheet" href="research.css?v=20261030-2">
+  <link rel="stylesheet" href="cinematic.css?v=20261030-2">
+  <script src="intro.js?v=20261030-2" defer></script>
   <script src="data.js?v=20261030" defer></script>
   <script src="content.js?v=20261030" defer></script>
-  <script src="app.js?v=20261030" defer></script>
+  <script src="app.js?v=20261030-2" defer></script>
   <script src="research.js?v=20261030" defer></script>
 </head>
 <body>
@@ -42,27 +44,21 @@
     <div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
   </header>
   <main>
-    <section class="hero" id="home" aria-labelledby="hero-title">
-      <canvas id="weave-canvas" aria-hidden="true"></canvas>
-      <div class="hero-grid wrap">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> A benchmark for embodied agency</p>
-          <h1 id="hero-title">Robo<span>Weave</span><span class="title-period">.</span></h1>
-          <p class="paper-title">Benchmarking the Interplay of<br class="desktop-break"> Agentic Capabilities in Embodied Tasks</p>
-          <p class="hero-description">Acquiring evidence. Remembering what matters.<br>Reasoning about the world. Recovering when it changes.<br><strong>Can an agent keep them working together?</strong></p>
-          <div class="hero-actions"><a class="button" href="#benchmark">Explore the benchmark <span aria-hidden="true">↓</span></a><a class="button button-outline" href="#results"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg> View the results</a></div>
-          <p class="hero-footnote">Egocentric observations <span>·</span> Closed-loop interaction <span>·</span> BEHAVIOR</p>
-        </div>
-        <div class="hero-art" aria-label="Four capabilities woven into one embodied agent">
-          <div class="orbital orbital-one" aria-hidden="true"></div><div class="orbital orbital-two" aria-hidden="true"></div>
-          <div class="art-crosshair crosshair-one" aria-hidden="true">+</div><div class="art-crosshair crosshair-two" aria-hidden="true">+</div>
-          <img class="hero-robot" src="assets/brand/roboweave.png" width="1536" height="1024" alt="RoboWeave's robot with interwoven blue and orange ribbons" fetchpriority="high">
-          <span class="orbit-label orbit-a"><i>A</i> Acquire</span><span class="orbit-label orbit-m"><i>M</i> Remember</span><span class="orbit-label orbit-p"><i>P</i> Reason</span><span class="orbit-label orbit-v"><i>V</i> Verify & recover</span>
-          <span class="art-caption">FOUR CAPABILITIES / ONE AGENT</span>
-        </div>
-      </div>
-      <div class="hero-people wrap" aria-label="Authors and affiliations">
-        <div class="authors">
+    <section class="intro-track story-static" id="home" aria-labelledby="hero-title">
+      <div class="intro-pin">
+        <canvas id="intro-canvas" aria-hidden="true"></canvas>
+        <div class="intro-shade" aria-hidden="true"></div>
+        <div class="intro-topline"><span>ROBO<span style="color:#a4d1ff">WEAVE</span> / AN EMBODIED INTERPLAY</span><a href="#overview">Skip intro ↘</a></div>
+        <div class="story-caption" data-story-chapter="0"><p class="chapter-kicker">FOUR CAPABILITIES. ONE AGENT.</p><h2>Intelligence<br>comes together.</h2><p>Scroll to weave the capabilities<br>of an embodied agent.</p></div>
+        <div class="story-caption" data-story-chapter="1" style="--chapter-color:#87c9ff"><p class="chapter-kicker">01 / ACTIVE INFORMATION ACQUISITION</p><h2>Find the<br><strong>missing evidence.</strong></h2><p>Change the view. Seek the information<br>needed for the next decision.</p></div>
+        <div class="story-caption" data-story-chapter="2" style="--chapter-color:#c1afff"><p class="chapter-kicker">02 / MEMORY</p><h2>Remember<br><strong>what matters.</strong></h2><p>Keep task-relevant history available<br>as the world changes.</p></div>
+        <div class="story-caption" data-story-chapter="3" style="--chapter-color:#ffb17b"><p class="chapter-kicker">03 / PHYSICAL REASONING</p><h2>Reason about<br><strong>the physical world.</strong></h2><p>Connect a proposed action<br>to its physical consequences.</p></div>
+        <div class="story-caption" data-story-chapter="4" style="--chapter-color:#9ce5cf"><p class="chapter-kicker">04 / VERIFICATION AND RECOVERY</p><h2>Check the outcome.<br><strong>Adapt. Continue.</strong></h2><p>Verify the resulting state.<br>Recover when an action falls short.</p></div>
+        <div class="title-sheet">
+          <img class="static-mark" src="assets/brand/roboweave.png" width="230" height="150" alt="RoboWeave robot with blue and orange woven ribbons" fetchpriority="high">
+          <h1 id="hero-title"><span data-title-word style="color:#f0f5fc">Robo</span><span data-title-word>Weave</span></h1>
+          <p class="paper-name"><span data-title-word>Benchmarking</span> <span data-title-word>the</span> <span data-title-word>Interplay</span> <span data-title-word>of</span><br> <span data-title-word>Agentic</span> <span data-title-word>Capabilities</span> <span data-title-word>in</span> <span data-title-word>Embodied Tasks</span></p>
+          <div class="authors" data-title-group>
           <span><a href="https://openreview.net/profile?id=~Yuanshuai_li2" target="_blank" rel="noopener">Yuanshuai Li</a><sup>1,*</sup></span>
           <span><a href="https://openreview.net/profile?id=~Yuping_Yan1" target="_blank" rel="noopener">Yuping Yan</a><sup>1,*</sup></span>
           <span><a href="https://openreview.net/profile?id=~Jiaqi_Gu2" target="_blank" rel="noopener">Jiaqi Gu</a><sup>2</sup></span>
@@ -70,18 +66,23 @@
           <span><a href="https://openreview.net/profile?id=~Lubin_Fan2" target="_blank" rel="noopener">Lubin Fan</a><sup>2</sup></span>
           <span><a href="https://openreview.net/profile?id=~Yaochu_Jin1" target="_blank" rel="noopener">Yaochu Jin</a><sup>1,†</sup></span>
         </div>
-        <div class="affiliations"><span><img src="assets/westlake-mark.png" width="22" height="22" alt=""><sup>1</sup> Westlake University</span><span><img src="assets/qwen-mark.svg" width="22" height="22" alt=""><sup>2</sup> Alibaba Token Hub, Alibaba Group</span></div>
-        <p class="author-notes">* Equal contribution <span>·</span> † Corresponding author</p>
+        <div class="affiliations" data-title-group><span><img src="assets/westlake-mark.png" width="22" height="22" alt=""><sup>1</sup> Westlake University</span><span><img src="assets/qwen-mark.svg" width="22" height="22" alt=""><sup>2</sup> Alibaba Token Hub, Alibaba Group</span></div>
+        <p class="author-notes" data-title-group>* Equal contribution <span>·</span> † Corresponding author</p>
+          <div class="title-actions" data-title-group><span class="release-chip">Paper <small>COMING SOON</small></span><span class="release-chip">Code &amp; data <small>COMING SOON</small></span><a href="#episodes">Explore the tasks ↗</a></div>
+          <div class="title-endnote" data-title-group><a href="#overview">Scroll to explore the research ↓</a><button id="story-replay" type="button">Replay intro ↺</button></div>
+        </div>
+        <div class="story-scroll" aria-hidden="true"><span class="scroll-mouse"></span><span>Scroll to weave</span></div>
+        <nav class="story-rail" aria-label="Introduction chapters"><button type="button" data-story-to="0" aria-label="Introduction">○</button><button type="button" data-story-to="1" aria-label="Active information acquisition">A</button><button type="button" data-story-to="2" aria-label="Memory">M</button><button type="button" data-story-to="3" aria-label="Physical reasoning">P</button><button type="button" data-story-to="4" aria-label="Verification and recovery">V</button><span class="story-rail-divider" aria-hidden="true"></span><button type="button" data-story-to="5" aria-label="Project title and authors">RoboWeave</button></nav>
+        <div class="story-progress" aria-hidden="true"><span class="story-progress-fill"></span></div>
       </div>
-      <div class="hero-bottom wrap"><a href="#overview" class="scroll-link"><span class="scroll-line" aria-hidden="true"></span> Scroll to discover</a><button id="motion-toggle" class="motion-button" type="button" aria-pressed="false"><span id="motion-symbol" aria-hidden="true">Ⅱ</span> <span id="motion-label">Pause motion</span></button></div>
     </section>
 
     <div class="stats-band"><dl class="stats wrap"><div><dt>240</dt><dd>Interactive household tasks</dd></div><div><dt>4</dt><dd>Agentic capabilities</dd></div><div><dt>3</dt><dd>Levels of integration</dd></div><div><dt>20</dt><dd>Shared action primitives</dd></div></dl></div>
 
     <section class="section wrap" id="overview" aria-labelledby="overview-title">
-      <div class="section-kicker"><span>01 / THE QUESTION</span><span class="tiny-label">SUSTAINED EMBODIED AGENCY</span></div>
+      <div class="section-kicker"><span>OVERVIEW</span><span class="tiny-label">SUSTAINED EMBODIED AGENCY</span></div>
       <div class="intro-grid reveal">
-        <h2 id="overview-title">Capabilities are<br>only the <em>beginning.</em></h2>
+        <h2 id="overview-title">Overview</h2>
         <div class="intro-copy"><p>A household task keeps changing as an agent acts. A new observation must be remembered. A physical action can hide an object. An unexpected outcome calls for another look.</p><p>RoboWeave studies how four agentic capabilities remain effective as their demands persist and interact within the same episode.</p><a class="text-link" href="#episodes">See the four capabilities <span aria-hidden="true">↘</span></a></div>
       </div>
       <div class="capability-loop reveal" aria-label="Observation, decision, action, and feedback form a repeating loop">
@@ -90,8 +91,8 @@
     </section>
 
     <section class="section section-tinted" id="benchmark" aria-labelledby="benchmark-title"><div class="wrap">
-      <div class="section-kicker"><span>02 / THE BENCHMARK</span><span class="tiny-label">FROM BASIC ACTIONS TO COORDINATION</span></div>
-      <div class="section-heading reveal"><h2 id="benchmark-title">A shared world.<br><em>Increasingly intertwined demands.</em></h2><p>240 tasks built on BEHAVIOR in a humanoid setting. The same observation and action interface spans the full hierarchy.</p></div>
+      <div class="section-kicker"><span>01 / BENCHMARK</span><span class="tiny-label">FROM BASIC ACTIONS TO COORDINATION</span></div>
+      <div class="section-heading reveal"><h2 id="benchmark-title">The RoboWeave benchmark</h2><p>240 tasks built on BEHAVIOR in a humanoid setting. The same observation and action interface spans the full hierarchy.</p></div>
       <div class="hierarchy reveal">
         <article class="tier tier-zero"><div class="tier-top"><span class="level-tag">L0</span><span class="task-count">100 tasks</span></div><h3>Basic interaction</h3><p>Establish the execution substrate: navigate, look, pick, place, open, and close.</p><div class="tier-visual basic-visual" aria-hidden="true"><span>MOVE</span><b>→</b><span>PICK</span><b>→</b><span>PLACE</span></div><span class="tier-bottom">The interaction foundation</span></article>
         <article class="tier tier-one"><div class="tier-top"><span class="level-tag">L1</span><span class="task-count">120 tasks</span></div><h3>Capability-focused</h3><p>Make one primary demand the focus, with 30 tasks for each of the four capabilities.</p><div class="tier-visual capability-bubbles" aria-hidden="true"><span class="cap-a">A</span><span class="cap-m">M</span><span class="cap-p">P</span><span class="cap-v">V</span></div><span class="tier-bottom">One primary demand per task</span></article>
@@ -101,7 +102,7 @@
     </div></section>
 
     <section class="section wrap" id="episodes" aria-labelledby="capabilities-title">
-      <div class="section-kicker"><span>03 / INSIDE THE TASKS</span><span class="tiny-label">REAL OBSERVATIONS FROM THE MANUSCRIPT</span></div>
+      <div class="section-kicker"><span>02 / TASK GALLERY</span><span class="tiny-label">REAL OBSERVATIONS FROM THE MANUSCRIPT</span></div>
       <div class="section-heading reveal"><h2 id="capabilities-title">Four capabilities.<br><em>Explore them in action.</em></h2><p>Choose a capability to inspect a representative task and its recorded episode.</p></div>
       <div class="capability-tabs" role="tablist" aria-label="Capability examples"><button class="capability-tab" role="tab" id="tab-a" aria-selected="true" aria-controls="capability-panel" data-cap="A"><span class="cap-letter cap-a">A</span><span>Information acquisition</span></button><button class="capability-tab" role="tab" id="tab-m" aria-selected="false" aria-controls="capability-panel" tabindex="-1" data-cap="M"><span class="cap-letter cap-m">M</span><span>Memory</span></button><button class="capability-tab" role="tab" id="tab-p" aria-selected="false" aria-controls="capability-panel" tabindex="-1" data-cap="P"><span class="cap-letter cap-p">P</span><span>Physical reasoning</span></button><button class="capability-tab" role="tab" id="tab-v" aria-selected="false" aria-controls="capability-panel" tabindex="-1" data-cap="V"><span class="cap-letter cap-v">V</span><span>Verification & recovery</span></button></div>
       <div class="episode-panel" id="capability-panel" role="tabpanel" aria-labelledby="tab-a" tabindex="0">
@@ -112,7 +113,7 @@
     </section>
 
     <section class="section section-tinted" id="results" aria-labelledby="results-title"><div class="wrap">
-      <div class="section-kicker"><span>04 / EVALUATION</span><span class="tiny-label">CAPABILITY STRENGTH → TASK COORDINATION</span></div>
+      <div class="section-kicker"><span>03 / EVALUATION</span><span class="tiny-label">CAPABILITY STRENGTH → TASK COORDINATION</span></div>
       <div class="section-heading reveal"><h2 id="results-title">Coordination remains<br><em>an open challenge.</em></h2><p>Strong performance on capability-focused tasks can decline when multiple demands interact.</p></div>
       <div class="results-grid reveal">
         <div class="results-story"><p class="eyebrow">A CLOSER LOOK</p><h3>From focused demands<br>to integrated execution.</h3><p>The GPT-6 Astra + Codex configuration achieves 85.0% average success on L1 and 55.0% on L2.</p><p>Harness gains vary by backbone: on L2, Codex raises Astra from 30% to 55%, while Sol changes from 30% to 25%.</p><div class="finding"><span class="finding-number">30<span>pp</span></span><p>L1-to-L2 success-rate gap<br><small>GPT-6 Astra + Codex</small></p></div></div>
@@ -123,21 +124,21 @@
       <div class="scatter-card reveal"><div class="research-heading"><div><p class="eyebrow">INTERACTIVE COMPARISON</p><h3>Read success alongside action steps.</h3></div><label for="scatter-capability">Capability <select id="scatter-capability"><option value="1">A · Information acquisition</option><option value="2">M · Memory</option><option value="3">P · Physical reasoning</option><option value="4">V · Verification & recovery</option></select></label></div><div id="research-scatter" class="research-scatter"></div><p id="scatter-readout" class="scatter-readout" aria-live="polite">Hover or focus a point to read its exact values.</p><div id="scatter-legend" class="scatter-legend"></div><p class="section-note">Filled markers indicate a native harness; outlined markers indicate Base. Lower action counts alone do not establish better task performance.</p></div>
     </div></section>
 
-    <section class="section wrap" id="real-robot" aria-labelledby="real-title"><div class="section-kicker"><span>05 / REAL-ROBOT CASES</span><span class="tiny-label">RECORDED OBSERVATIONS & ACTIONS</span></div><div class="section-heading reveal"><h2 id="real-title">See the agent<br><em>act in the physical world.</em></h2><p>Three original GPT-6 Astra runs on a real tabletop setup, preserving observations, selected targets, actions, and the displayed final state.</p></div><div class="real-task"><span class="eyebrow">THE TASK</span><p>Identify the container holding two of {shrimp, pea pod, broccoli}, then place the missing item inside.</p></div><div class="run-jumps"><a href="#real-run-1">Run 1</a><a href="#real-run-2">Run 2</a><a href="#real-run-3">Run 3</a></div><div class="real-runs">
+    <section class="section wrap" id="real-robot" aria-labelledby="real-title"><div class="section-kicker"><span>04 / REAL-ROBOT CASES</span><span class="tiny-label">RECORDED OBSERVATIONS & ACTIONS</span></div><div class="section-heading reveal"><h2 id="real-title">Real-robot trajectories</h2><p>Three original GPT-6 Astra runs on a real tabletop setup, preserving observations, selected targets, actions, and the displayed final state.</p></div><div class="real-task"><span class="eyebrow">THE TASK</span><p>Identify the container holding two of {shrimp, pea pod, broccoli}, then place the missing item inside.</p></div><div class="run-jumps"><a href="#real-run-1">Run 1</a><a href="#real-run-2">Run 2</a><a href="#real-run-3">Run 3</a></div><div class="real-runs">
       <article class="real-run reveal" id="real-run-1"><div class="research-heading"><h3>GPT-6 Astra <span>· Run 01</span></h3><button type="button" class="text-link" data-figure="assets/real-run-1.webp" data-figure-title="GPT-6 Astra · real-robot Run 1">Expand complete run ↗</button></div><button class="image-button" type="button" data-figure="assets/real-run-1.webp" data-figure-title="GPT-6 Astra · real-robot Run 1" aria-label="Expand real-robot run 1"><img src="assets/real-run-1.webp" alt="Original GPT-6 Astra real-robot Run 1: complete observation and action sequence" loading="lazy"></button><p class="section-note">Sequential container inspection, followed by an upward viewpoint adjustment and placement of the missing shrimp.</p></article>
       <article class="real-run reveal" id="real-run-2"><div class="research-heading"><h3>GPT-6 Astra <span>· Run 02</span></h3><button type="button" class="text-link" data-figure="assets/real-run-2.webp" data-figure-title="GPT-6 Astra · real-robot Run 2">Expand complete run ↗</button></div><button class="image-button" type="button" data-figure="assets/real-run-2.webp" data-figure-title="GPT-6 Astra · real-robot Run 2" aria-label="Expand real-robot run 2"><img src="assets/real-run-2.webp" alt="Original GPT-6 Astra real-robot Run 2: complete observation and action sequence" loading="lazy"></button><p class="section-note">Early identification of the target container, followed by two lateral viewpoint corrections and placement of the missing shrimp.</p></article>
       <article class="real-run reveal" id="real-run-3"><div class="research-heading"><h3>GPT-6 Astra <span>· Run 03</span></h3><button type="button" class="text-link" data-figure="assets/real-run-3.webp" data-figure-title="GPT-6 Astra · real-robot Run 3">Expand complete run ↗</button></div><button class="image-button" type="button" data-figure="assets/real-run-3.webp" data-figure-title="GPT-6 Astra · real-robot Run 3" aria-label="Expand real-robot run 3"><img src="assets/real-run-3.webp" alt="Original GPT-6 Astra real-robot Run 3: complete observation and action sequence" loading="lazy"></button><p class="section-note">Sequential container inspection, followed by a lateral viewpoint adjustment and placement of the missing shrimp.</p></article>
     </div><p class="section-note">Each observation tile shows the frame before its action. These are illustrative individual runs, not an aggregate real-robot benchmark score. “DONE” is an action in the recorded trace.</p></section>
-    <section class="section section-tinted" id="interface"><div class="wrap"><div class="section-kicker"><span>06 / THE SHARED INTERFACE</span><span class="tiny-label">20 INTERMEDIATE ACTION PRIMITIVES</span></div><div class="section-heading reveal"><h2>Ground decisions<br><em>in actions.</em></h2><p>Abstract low-level motor execution while preserving the agent’s task-level spatial and physical decisions.</p></div><div class="action-grid reveal">
+    <section class="section section-tinted" id="interface"><div class="wrap"><div class="section-kicker"><span>05 / SHARED INTERFACE</span><span class="tiny-label">20 INTERMEDIATE ACTION PRIMITIVES</span></div><div class="section-heading reveal"><h2>A shared action interface</h2><p>Abstract low-level motor execution while preserving the agent’s task-level spatial and physical decisions.</p></div><div class="action-grid reveal">
       <article><button class="image-button" type="button" data-figure="assets/09_pick.webp" data-figure-title="Pick: a shared object-interaction action"><img src="assets/09_pick.webp" alt="Original pick-action example" loading="lazy"></button><h3>Manipulate</h3><p>Pick and place objects while accounting for their spatial relations.</p></article>
       <article><button class="image-button" type="button" data-figure="assets/15_open.webp" data-figure-title="Open: change the environment state"><img src="assets/15_open.webp" alt="Original open-action example" loading="lazy"></button><h3>Change the state</h3><p>Open, close, and toggle to interact with the household environment.</p></article>
       <article><button class="image-button" type="button" data-figure="assets/07_look_up.webp" data-figure-title="Look up: acquire visual information"><img src="assets/07_look_up.webp" alt="Original look-up-action example" loading="lazy"></button><h3>Observe and navigate</h3><p>Move, turn, and look to acquire information and reach the next action.</p></article>
     </div><div class="protocol-cards reveal"><article><h3>Shared observations</h3><p>One head-camera and two wrist-camera RGB views, with observations, actions, and receipts from the five most recent completed steps.</p></article><article><h3>Shared action interface</h3><p>Temporary visual markers select visible targets while leaving task-level choices to the agent.</p></article><article><h3>World-state verification</h3><p>An environment-side verifier checks the final state. An agent’s declaration of completion is not itself success.</p></article></div></div></section>
-    <section class="section wrap" id="resources" aria-labelledby="resources-title"><div class="section-kicker"><span>07 / RESEARCH RESOURCES</span><span class="tiny-label">KEEP EXPLORING</span></div><div class="resource-grid reveal"><div><h2 id="resources-title">Explore<br><em>RoboWeave.</em></h2><p class="resource-intro">Benchmarking the Interplay of Agentic Capabilities in Embodied Tasks</p><p class="release-note">Paper PDF, benchmark code, and dataset are coming soon.</p></div><div class="resource-links"><div class="resource-link resource-pending"><span class="resource-icon" aria-hidden="true">↗</span><span><strong>Paper PDF</strong><small>Coming soon</small></span><span class="coming-soon">SOON</span></div><div class="resource-link resource-pending"><span class="resource-icon" aria-hidden="true">{ }</span><span><strong>Benchmark code & dataset</strong><small>Coming soon</small></span><span class="coming-soon">SOON</span></div><a class="resource-link" href="assets/results.json" download><span class="resource-icon" aria-hidden="true">↓</span><span><strong>Reported result values</strong><small>Success rates & action steps · JSON</small></span><span aria-hidden="true">↓</span></a><button class="resource-link resource-button" type="button" data-figure="assets/overview.webp" data-figure-title="Original manuscript benchmark overview"><span class="resource-icon" aria-hidden="true">▦</span><span><strong>Original benchmark overview</strong><small>Research figure from the original site</small></span><span aria-hidden="true">↗</span></button></div></div></section>
+    <section class="section wrap" id="resources" aria-labelledby="resources-title"><div class="section-kicker"><span>06 / RESOURCES</span><span class="tiny-label">KEEP EXPLORING</span></div><div class="resource-grid reveal"><div><h2 id="resources-title">Resources</h2><p class="resource-intro">Benchmarking the Interplay of Agentic Capabilities in Embodied Tasks</p><p class="release-note">Paper PDF, benchmark code, and dataset are coming soon.</p></div><div class="resource-links"><div class="resource-link resource-pending"><span class="resource-icon" aria-hidden="true">↗</span><span><strong>Paper PDF</strong><small>Coming soon</small></span><span class="coming-soon">SOON</span></div><div class="resource-link resource-pending"><span class="resource-icon" aria-hidden="true">{ }</span><span><strong>Benchmark code & dataset</strong><small>Coming soon</small></span><span class="coming-soon">SOON</span></div><a class="resource-link" href="assets/results.json" download><span class="resource-icon" aria-hidden="true">↓</span><span><strong>Reported result values</strong><small>Success rates & action steps · JSON</small></span><span aria-hidden="true">↓</span></a><button class="resource-link resource-button" type="button" data-figure="assets/overview.webp" data-figure-title="Original manuscript benchmark overview"><span class="resource-icon" aria-hidden="true">▦</span><span><strong>Original benchmark overview</strong><small>Research figure from the original site</small></span><span aria-hidden="true">↗</span></button></div></div></section>
   </main>
   <footer class="footer wrap"><a class="brand" href="#home">Robo<span class="brand-accent">Weave</span><span class="footer-dot">.</span></a><p>Embodied capabilities, woven together. <a href="https://github.com/ShawnLee0910/embodiedscope" target="_blank" rel="noopener">Website source ↗</a></p><a href="#home" class="back-top">Back to top ↑</a></footer>
   <dialog id="episode-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><p class="eyebrow">RECORDED EPISODE</p><h2 id="dialog-title">Active Information Acquisition</h2></div><button id="dialog-close" class="icon-button" type="button" aria-label="Close episode">✕</button></div><p id="dialog-description"></p><div class="dialog-image"><img id="dialog-image" src="assets/explore.webp" width="2200" height="2409" alt="Full recorded episode" loading="lazy"></div></dialog>
   <dialog id="figure-dialog" aria-labelledby="figure-dialog-title"><div class="dialog-header"><div><p class="eyebrow">ORIGINAL RESEARCH FIGURE</p><h2 id="figure-dialog-title">Research figure</h2></div><div class="figure-dialog-actions"><button type="button" class="button button-small button-outline" id="figure-size">Actual size</button><button id="figure-close" class="icon-button" type="button" aria-label="Close figure">✕</button></div></div><div class="dialog-image"><img id="figure-image" src="assets/overview.webp" alt="Expanded original research figure" loading="lazy"></div></dialog>
-  <noscript><p class="noscript-note">Enable JavaScript to switch task examples and model configurations. The overview, hierarchy, paper, and gallery links remain available.</p></noscript>
+  <noscript><p class="noscript-note">Enable JavaScript for the scroll introduction and interactive result views. All original research figures and section links remain available.</p></noscript>
 </body>
 </html>

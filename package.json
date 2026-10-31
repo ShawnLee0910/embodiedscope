@@ -1,0 +1,7 @@
+{
+  "name": "roboweave-homepage",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {"build:intro": "node src/build-intro.mjs"},
+  "devDependencies": {"esbuild": "0.28.2", "three": "0.187.0"}
+}

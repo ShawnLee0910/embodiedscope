@@ -1,18 +1,17 @@
-/* Original RoboWeave homepage. No dependencies or analytics. */
+/* Original RoboWeave homepage. Research interactions. No analytics. */
 (() => {
   'use strict';
   const data = window.ROBO_WEAVE_DATA;
   if (!data) return;
   const $ = (selector) => document.querySelector(selector);
   const root = document.documentElement;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const readPreference = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
   const savePreference = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Private browsing is supported. */ } };
   const setTheme = (theme) => {
     root.dataset.theme = theme;
     const next = theme === 'dark' ? 'light' : 'dark';
     $('#theme-toggle').setAttribute('aria-label', `Switch to ${next} theme`);
-    $('meta[name="theme-color"]').content = theme === 'dark' ? '#0b1018' : '#f8f9fc';
+    $('meta[name="theme-color"]').content = theme === 'dark' ? '#081116' : '#f2f6f7';
   };
   setTheme(readPreference('roboweave-theme') === 'light' ? 'light' : 'dark');
   $('#theme-toggle').addEventListener('click', () => { const theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(theme); savePreference('roboweave-theme', theme); });
@@ -89,30 +88,4 @@
   addEventListener('scroll', () => { if (!scrollPending) { scrollPending = true; requestAnimationFrame(updateProgress); } }, {passive:true});
   updateProgress();
 
-  // A light, original weave animation echoes the four capability strands.
-  const canvas = $('#weave-canvas');
-  const context = canvas.getContext('2d');
-  let width = 0, height = 0, frame = 0, phase = 0;
-  let paused = reducedMotion.matches || readPreference('roboweave-motion') === 'paused';
-  const resize = () => { const dpr = Math.min(devicePixelRatio || 1,2); width = canvas.clientWidth; height = canvas.clientHeight; canvas.width = width*dpr; canvas.height = height*dpr; if (context) context.setTransform(dpr,0,0,dpr,0,0); draw(); };
-  function draw() {
-    if (!context) return;
-    context.clearRect(0,0,width,height);
-    const light = root.dataset.theme === 'light';
-    const colors = light ? ['#2469a512','#a7602b12','#8055ae0c','#24745e0c'] : ['#79bdff14','#ffaf7212','#baadff0e','#8ed7bb0c'];
-    for (let strand=0;strand<4;strand++) {
-      context.beginPath();
-      for (let x=width*.35;x<=width+8;x+=8) { const progress=x/width; const y=height*.51 + Math.sin(progress*8+phase+strand*1.2)*(45+strand*24)+Math.cos(progress*4+strand)*height*.13; x===width*.35 ? context.moveTo(x,y) : context.lineTo(x,y); }
-      context.strokeStyle=colors[strand]; context.lineWidth=1; context.stroke();
-    }
-    for(let i=0;i<32;i++){const x=((i*137.5)%1000)/1000*width;const y=((i*83.7)%700)/700*height;context.fillStyle=light?'#4a699322':'#b2d7ff35';context.beginPath();context.arc(x,y,i%5===0?1:.55,0,Math.PI*2);context.fill();}
-  }
-  function animate() { frame=0; if (paused || document.hidden || !context) return; phase+=0.002;draw();frame=requestAnimationFrame(animate); }
-  function syncMotion() { document.body.classList.toggle('motion-paused',paused);$('#motion-toggle').setAttribute('aria-pressed',String(paused));$('#motion-label').textContent=paused?'Resume motion':'Pause motion';$('#motion-symbol').textContent=paused?'▷':'Ⅱ';if(frame)cancelAnimationFrame(frame);frame=0;draw();if(!paused&&!document.hidden)frame=requestAnimationFrame(animate); }
-  $('#motion-toggle').addEventListener('click',()=>{paused=!paused;savePreference('roboweave-motion',paused?'paused':'playing');syncMotion();});
-  reducedMotion.addEventListener('change',()=>{paused=reducedMotion.matches;syncMotion();});
-  document.addEventListener('visibilitychange',syncMotion);
-  new MutationObserver(draw).observe(root,{attributes:true,attributeFilter:['data-theme']});
-  addEventListener('resize',()=>{resize();updateProgress();});
-  resize();syncMotion();
 })();

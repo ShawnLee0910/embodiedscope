@@ -12,7 +12,13 @@ Affiliations: Westlake University; Alibaba Token Hub, Alibaba Group.
 
 https://shawnlee0910.github.io/embodiedscope/
 
-Static HTML, CSS and JavaScript; no build step or dependency installation is needed. GitHub Pages publishes the repository root on `main`. The repository name and public URL are retained.
+Static HTML, CSS and JavaScript. GitHub Pages publishes the repository root on `main`; the checked-in files need no server build or runtime CDN. The repository name and public URL are retained.
+
+The opening is a scroll-directed 3D introduction: the camera pulls back and orbits, two solid blue/orange ribbons form around the RoboWeave robot, four capability paths arrive, and the scene gives way to the title and authors. Scroll backward to reverse the sequence. Chapter controls, Skip intro, and Replay intro provide direct navigation. It animates only in response to scrolling, and stops rendering off screen. Reduced-motion and unavailable/lost WebGL contexts show the complete static title page instead.
+
+`src/intro-scene.js` is the original scene source; `intro.js` is its bundled browser build with Three.js 0.187.0. See `THIRD_PARTY_LICENSES.txt`. The existing logo was recreated as procedural geometry for this introduction; no EmbodiedSWE animation frames or research media are redistributed.
+
+Only when editing the 3D scene, run `npm ci` followed by `npm run build:intro`, and commit the updated source and bundled `intro.js` together. Ordinary HTML/CSS changes need no build.
 
 ## Research and release status
 
@@ -30,4 +36,4 @@ Original action illustrations, the original four-panel manuscript figure and its
 
 Run `python -m http.server 8766 --bind 127.0.0.1` from this directory and open http://127.0.0.1:8766/.
 
-The homepage supports theme selection, reduced motion, capability tabs, exact-value result tables for SR and AAS, sorting, and expandable research figures. Assets use relative paths so the site also works at the existing `/embodiedscope/` GitHub Pages path.
+The homepage supports theme selection, a reversible scroll introduction, reduced motion, capability tabs, exact-value result tables for SR and AAS, sorting, and expandable research figures. Assets use relative paths so the site also works at the existing `/embodiedscope/` GitHub Pages path.
