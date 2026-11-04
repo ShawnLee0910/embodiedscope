@@ -35,6 +35,8 @@ function start() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  // Preserve the CSS background through the postprocessing chain.
+  renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, .1, 70);
   const environment = new RoomEnvironment();
@@ -44,12 +46,13 @@ function start() {
   scene.environmentIntensity = .38;
   environment.dispose(); pmrem.dispose();
 
-  scene.add(new THREE.HemisphereLight(0xbacfff,0x16202e,.65));
+  const hemisphere = new THREE.HemisphereLight(0xbacfff,0x16202e,.65);
+  scene.add(hemisphere);
   function light(color,power,x,y,z) { const l = new THREE.DirectionalLight(color,power);l.position.set(x,y,z);scene.add(l);return l; }
-  light(0xf3f7ff,2.0,3,5,5);
-  light(0x388fff,2.5,-4,1,-2);
-  light(0xff974c,2.5,4,1,-1);
-  light(0xc6d8ff,.5,0,-2,4);
+  const keyLight = light(0xf3f7ff,2.0,3,5,5);
+  const blueRim = light(0x388fff,2.5,-4,1,-2);
+  const orangeRim = light(0xff974c,2.5,4,1,-1);
+  const fillLight = light(0xc6d8ff,.5,0,-2,4);
 
   const shell = new THREE.MeshPhysicalMaterial({color:0xdce6f3,metalness:.14,roughness:.29,clearcoat:.7,clearcoatRoughness:.24});
   const white = new THREE.MeshPhysicalMaterial({color:0xf2f5fa,metalness:.10,roughness:.27,clearcoat:.75,clearcoatRoughness:.23});
@@ -221,7 +224,36 @@ function start() {
   const offsetTop=()=>document.querySelector('.topbar')?.offsetHeight||56;
   let target=0, current=0, raf=0, visible=true, lastTime=0;
   let mobile=innerWidth<700;
-  const beatCenters=[.025,.19,.365,.54,.695];
+  let lightTheme=false;
+  function applyTheme() {
+    lightTheme=document.documentElement.dataset.theme==='light';
+    // The bright presentation has no bloom halo over its transparent background.
+    // Keeping the background in CSS also avoids tone-mapping a flat CSS color.
+    bloom.enabled=!lightTheme;
+    scene.environmentIntensity=lightTheme?.48:.38;
+    hemisphere.color.setHex(lightTheme?0xd7e3f0:0xbacfff);
+    hemisphere.groundColor.setHex(lightTheme?0x647c96:0x16202e);
+    hemisphere.intensity=lightTheme?.95:.65;
+    keyLight.intensity=lightTheme?1.65:2.0;
+    blueRim.intensity=lightTheme?1.25:2.5;
+    orangeRim.intensity=lightTheme?1.25:2.5;
+    fillLight.intensity=lightTheme?.65:.5;
+    shell.color.setHex(lightTheme?0xc8d5e4:0xdce6f3);
+    white.color.setHex(lightTheme?0xe7edf4:0xf2f5fa);
+    eyeMaterial.emissiveIntensity=lightTheme?.75:1.9;
+    const palette=lightTheme?[0x286b9e,0x7451ad,0xb35e25,0x217662]:threadColors;
+    threads.forEach((thread,index)=>{
+      thread.line.material.color.setHex(palette[index]);
+      thread.dot.material.color.setHex(palette[index]).multiplyScalar(lightTheme?1:1.45);
+    });
+    stars.material.color.setHex(lightTheme?0x49738c:0x8fb8df);
+    stars.material.opacity=lightTheme?.16:.50;
+    lastTime=0;
+    requestDraw();
+  }
+  const themeObserver=new MutationObserver(applyTheme);
+  themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  const beatCenters=[.025,.16,.32,.48,.63];
   // A continuous camera path avoids braking at every capability chapter.
   const cameraCurve=new THREE.CatmullRomCurve3([
     new THREE.Vector3(.55,1.55,3.15),new THREE.Vector3(2.10,1.75,5.05),
@@ -233,9 +265,9 @@ function start() {
   ],false,'centripetal');
   const look=new THREE.Vector3();
   function draw(p) {
-    const closure=smooth(.04,.62,p);
-    const titleReveal=smooth(.70,.825,p);
-    const activeChapter=p>.76?5:beatCenters.reduce((best,v,i)=>Math.abs(v-p)<Math.abs(beatCenters[best]-p)?i:best,0);
+    const closure=smooth(.04,.58,p);
+    const titleReveal=smooth(.66,.79,p);
+    const activeChapter=p>.72?5:beatCenters.reduce((best,v,i)=>Math.abs(v-p)<Math.abs(beatCenters[best]-p)?i:best,0);
     updateRibbons(closure);
     robot.rotation.y=mix(-.10,.06,smooth(0,.66,p));
     robot.rotation.z=.015*Math.sin(p*Math.PI*3)*(1-titleReveal);
@@ -247,13 +279,13 @@ function start() {
     head.rotation.y=.12*Math.sin(p*9)*(1-titleReveal);
     head.rotation.x=-.035+.05*Math.sin(p*8);
     eyes.forEach((eye,i)=>eye.scale.y=1-.08*Math.sin(p*8+i*.3));
-    const cameraProgress=smooth(0,.74,p);
+    const cameraProgress=smooth(0,.68,p);
     cameraCurve.getPoint(cameraProgress,camera.position);lookCurve.getPoint(cameraProgress,look);
     if(mobile){camera.position.z*=1.4+.08*mobileOpening;camera.position.x*=.64;look.x=0;camera.fov=40;}else camera.fov=35;
     camera.lookAt(look);camera.updateProjectionMatrix();
     for(let j=0;j<threads.length;j++){
-      const thread=threads[j];const arrival=smooth(.08+j*.12,.28+j*.12,p)*(1-titleReveal);
-      thread.line.material.opacity=arrival*(activeChapter===j+1?.32:.12);
+      const thread=threads[j];const arrival=smooth(.08+j*.105,.28+j*.105,p)*(1-titleReveal);
+      thread.line.material.opacity=arrival*(activeChapter===j+1?(lightTheme?.65:.32):(lightTheme?.30:.12));
       const travel=clamp((p-.04-j*.1)/.52);
       const index=Math.floor(travel*160);
       thread.line.geometry.setDrawRange(0,Math.max(2,index+1));
@@ -264,24 +296,24 @@ function start() {
       const center=beatCenters[i];
       let opacity=smooth(center-.075,center-.035,p)*(1-smooth(center+.045,center+.08,p));
       if(i===0)opacity=1-smooth(.055,.12,p);
-      if(i===4)opacity*=1-smooth(.71,.745,p);
+      if(i===4)opacity*=1-smooth(.67,.70,p);
       caption.style.opacity=String(opacity);
       caption.style.transform=`translateY(${(1-opacity)*18}px)`;
       caption.setAttribute('aria-hidden',opacity<.4?'true':'false');
     });
-    const titleIn=smooth(.755,.81,p);
+    const titleIn=smooth(.70,.76,p);
     title.style.opacity=String(titleIn);
-    title.style.pointerEvents=p>.87?'auto':'none';
-    title.inert=p<.87;
+    title.style.pointerEvents=p>.925?'auto':'none';
+    title.inert=p<.925;
     wordItems.forEach((item,i)=>{
-      const start=i<2?.765+i*.01:.805+(i-2)*.0035;
+      const start=i<2?.71+i*.01:.745+(i-2)*.0035;
       const reveal=smooth(start,start+.06,p);
       item.style.opacity=String(reveal);
       item.style.transform=`translateY(${(1-reveal)*26}px)`;
       item.style.filter=`blur(${(1-reveal)*4}px)`;
     });
     titleGroups.forEach((item,i)=>{
-      const start=.875+i*.016;
+      const start=.815+i*.016;
       const reveal=smooth(start,start+.045,p);
       item.style.opacity=String(reveal);
       item.style.transform=`translateY(${(1-reveal)*22}px)`;
@@ -325,7 +357,7 @@ function start() {
     draw(current);
   }
   function scrollToProgress(p){const rect=stage.getBoundingClientRect();scrollTo({top:scrollY+rect.top-offsetTop()+(rect.height-pin.offsetHeight)*p,behavior:reduced.matches?'auto':'smooth'});}
-  const jumpPositions=[0,.19,.365,.54,.695,.985];
+  const jumpPositions=[0,.16,.32,.48,.63,.97];
   chapterButtons.forEach(button=>button.addEventListener('click',()=>scrollToProgress(jumpPositions[Number(button.dataset.storyTo)])));
   stage.querySelector('#story-replay')?.addEventListener('click',()=>scrollToProgress(0));
   document.querySelectorAll('a[href="#home"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();scrollToProgress(.985);history.replaceState(null,'','#home');}));
@@ -340,8 +372,9 @@ function start() {
   addEventListener('scroll',update,{passive:true});addEventListener('resize',resize,{passive:true});
   document.addEventListener('visibilitychange',()=>{lastTime=0;requestDraw();});
   const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastTime=0;update();}else if(raf){cancelAnimationFrame(raf);raf=0;}},{rootMargin:'100px'});observer.observe(stage);
-  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;if(raf)cancelAnimationFrame(raf);fallback();});
-  reduced.addEventListener('change',()=>{if(reduced.matches){active=false;if(raf)cancelAnimationFrame(raf);fallback();title.inert=false;}});
+  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;themeObserver.disconnect();if(raf)cancelAnimationFrame(raf);fallback();});
+  reduced.addEventListener('change',()=>{if(reduced.matches){active=false;themeObserver.disconnect();if(raf)cancelAnimationFrame(raf);fallback();title.inert=false;}});
+  applyTheme();
   resize();current=target;draw(current);
   if(location.hash==='#home')scrollToProgress(.985);
 }

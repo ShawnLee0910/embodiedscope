@@ -1,0 +1,205 @@
+{
+  "description": "Selected observations from author-provided trajectories. Frame numbers are observation indices, not action counts. Images preserve all three camera views. Captions describe visible states and public receipts, not private model reasoning.",
+  "frames": [
+    {
+      "capability": "A",
+      "frame": 0,
+      "event": 1,
+      "source": "02_附录图与轨迹/full_trajectories/A/frames/000_event_001_physical.png",
+      "source_sha256": "5c81967151039b0f7649b121fbfd3f34a06c80ff13caf6f33abbc760fa9dd726",
+      "image": "assets/episodes/a-000.webp",
+      "image_sha256": "b23ed7a17a2730c863e9de4da1075492f30cc9fb0049a746a780295ac7d68c8f",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "A",
+      "frame": 13,
+      "event": 30,
+      "source": "02_附录图与轨迹/full_trajectories/A/frames/013_event_030_marker.png",
+      "source_sha256": "3e5604d08b211eee0888bd7c5d8174a8226c72b5fd7edd325c1caaef4aa0ea0c",
+      "image": "assets/episodes/a-013.webp",
+      "image_sha256": "0d9c5409bf50d35568fae4a9bc89f78bc676e11a4b476a76ef6d0d4174ea880c",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "A",
+      "frame": 14,
+      "event": 33,
+      "source": "02_附录图与轨迹/full_trajectories/A/frames/014_event_033_physical.png",
+      "source_sha256": "1b38b9df4e66ab4f254810cb54dc490a974a327f0e55f4e034c40ad1eb2e87c8",
+      "image": "assets/episodes/a-014.webp",
+      "image_sha256": "ded979b820d0ffd5f13b4507d79c3edf4df85e104ea3181d0cfc8bbb9336af95",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "A",
+      "frame": 20,
+      "event": 47,
+      "source": "02_附录图与轨迹/full_trajectories/A/frames/020_event_047_transient.png",
+      "source_sha256": "8d65b8d2ffb9b3cebd3f9fbf59c2bde0d23fe314db22ff02842d1912b6cec147",
+      "image": "assets/episodes/a-020.webp",
+      "image_sha256": "f207839977ef7bbde442f6f9e63e7878e26f6c71ecbac249765931664a7b42a6",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "A",
+      "frame": 23,
+      "event": 56,
+      "source": "02_附录图与轨迹/full_trajectories/A/frames/023_event_056_physical.png",
+      "source_sha256": "c1bbd4eec31e30c7407f3db4cfb5af9c1ab26fe8911d13d99121e7056a010ba3",
+      "image": "assets/episodes/a-023.webp",
+      "image_sha256": "e400ece734d03e136a54caeff1ac5b9e84c13717133af975c02ebe13bd7399c8",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "M",
+      "frame": 0,
+      "event": 1,
+      "source": "02_附录图与轨迹/full_trajectories/M/frames/000_event_001_physical.png",
+      "source_sha256": "e8a856a270315d3811e0e01e9112ec3e4088ae240a69928ee79d7677f15627b3",
+      "image": "assets/episodes/m-000.webp",
+      "image_sha256": "9fc631ecee087a96a5d5c1aa74e3daf8ebd3d97777f8917d23d755b6e97a21a6",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "M",
+      "frame": 21,
+      "event": 64,
+      "source": "02_附录图与轨迹/full_trajectories/M/frames/021_event_064_physical.png",
+      "source_sha256": "e1f742e399fd177fab8503c5870b8e5d4c7e15b9ceabe4f1bfc71e3c3eff199b",
+      "image": "assets/episodes/m-021.webp",
+      "image_sha256": "e2e7b090cea4f8e57eaedd622fe1d1e180b0ca36a3115b6450c1ff78e6dadeaf",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "M",
+      "frame": 23,
+      "event": 70,
+      "source": "02_附录图与轨迹/full_trajectories/M/frames/023_event_070_physical.png",
+      "source_sha256": "8ecdc5b6367204f90f91712a433eb0f647995c152f12b7b9221ac790c3f23a2e",
+      "image": "assets/episodes/m-023.webp",
+      "image_sha256": "a7c7524de0e0134852287a3a9998868140e56d828ebd041ddb554119d1326c45",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "M",
+      "frame": 28,
+      "event": 85,
+      "source": "02_附录图与轨迹/full_trajectories/M/frames/028_event_085_physical.png",
+      "source_sha256": "e754d8336cfb10e063dadb14ab00e1fcb133f6e68ca7320b9b32e83bcfa57ceb",
+      "image": "assets/episodes/m-028.webp",
+      "image_sha256": "4e3c789f9d73175b14385b93755bc1a4d2c0c143ea785ab217ef323764e6e094",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "M",
+      "frame": 33,
+      "event": 100,
+      "source": "02_附录图与轨迹/full_trajectories/M/frames/033_event_100_physical.png",
+      "source_sha256": "f7bdd7bddd468875d284945df157f2cc5fecf978c53b783604eebe657c5f7304",
+      "image": "assets/episodes/m-033.webp",
+      "image_sha256": "e45564b0b26acaeac30edc5f0cb5bc846613fdd2f4eb37fc2dcac6316f506209",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "P",
+      "frame": 0,
+      "event": 1,
+      "source": "02_附录图与轨迹/full_trajectories/P/frames/000_event_001_physical.png",
+      "source_sha256": "4948bcb6852ecc231c35a87b3486373487d3a402f265ada0ab2a596638d0829f",
+      "image": "assets/episodes/p-000.webp",
+      "image_sha256": "73288d36088c6d92003a463d8b92b5f002e6b0e571b342198a44327c24de1827",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "P",
+      "frame": 4,
+      "event": 9,
+      "source": "02_附录图与轨迹/full_trajectories/P/frames/004_event_009_physical.png",
+      "source_sha256": "a0d58e5eb287236dbfaa1086a96aaf96757223427f9988f6ee586cd44956662c",
+      "image": "assets/episodes/p-004.webp",
+      "image_sha256": "22cc00c0b5cd997fa232ce176447f49cfdb93f5b85afcf66ad4095f41bbaa0be",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "P",
+      "frame": 6,
+      "event": 15,
+      "source": "02_附录图与轨迹/full_trajectories/P/frames/006_event_015_physical.png",
+      "source_sha256": "9c3ca7b07f76ee8c7e6a6220e215e9a379895bcaaac00f1936506a402dfb39b0",
+      "image": "assets/episodes/p-006.webp",
+      "image_sha256": "660fd5476a6f8e16e2b7b7b187a28ed52541cacf84e14e714450a8f7d771efd6",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "P",
+      "frame": 11,
+      "event": 26,
+      "source": "02_附录图与轨迹/full_trajectories/P/frames/011_event_026_marker.png",
+      "source_sha256": "a4a78d55e5f69953986949455c18414ab284f22b089659c21816d1fd48790672",
+      "image": "assets/episodes/p-011.webp",
+      "image_sha256": "519685a648af9f92de885d8555e95cec84a5a640e4018dbb0b5bf64af0a695e0",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "P",
+      "frame": 12,
+      "event": 29,
+      "source": "02_附录图与轨迹/full_trajectories/P/frames/012_event_029_physical.png",
+      "source_sha256": "80550b36e7c3f7a025730d42230559d5c0c4b2d06775621324c7b98fb8b5411b",
+      "image": "assets/episodes/p-012.webp",
+      "image_sha256": "897bebea577425753d2372fd4a7a9ff55c9737cfc9bb6d5a4a01b1e701922f50",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "V",
+      "frame": 0,
+      "event": 1,
+      "source": "02_附录图与轨迹/full_trajectories/V/frames/000_event_001_physical.png",
+      "source_sha256": "4117d1ec4358f274e38f9dfb14725cd11a8e227842fb8ca1c16832c84fd8e833",
+      "image": "assets/episodes/v-000.webp",
+      "image_sha256": "20f7f3b34ae53eeaa263dedbf760b3fa289aad5f227a1dc663bbacb51b6886c7",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "V",
+      "frame": 1,
+      "event": 4,
+      "source": "02_附录图与轨迹/full_trajectories/V/frames/001_event_004_marker.png",
+      "source_sha256": "01f89778b1e0d9d8ebc8ca4c699180d0e3001eb75b2d0c00b2d1541d46800474",
+      "image": "assets/episodes/v-001.webp",
+      "image_sha256": "8a7f0f5dbbf0d79d5123cff6e269c2a0288a590631bab3d0e0323a80392c29b2",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "V",
+      "frame": 2,
+      "event": 7,
+      "source": "02_附录图与轨迹/full_trajectories/V/frames/002_event_007_physical.png",
+      "source_sha256": "d825af192ab92ec404046a487de52a0f71262f749b0494f7cf8c5534c7ae4ac5",
+      "image": "assets/episodes/v-002.webp",
+      "image_sha256": "5bf4f1160ac010f47cc981be24a4557ed1880c33e97140965b1545e33aafc54b",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "V",
+      "frame": 3,
+      "event": 10,
+      "source": "02_附录图与轨迹/full_trajectories/V/frames/003_event_010_marker.png",
+      "source_sha256": "89a38fc8cc028c0ba099bec94a80423c897bf76bc2f55e3643adeb64fd84bb35",
+      "image": "assets/episodes/v-003.webp",
+      "image_sha256": "2426f08995943d84b128e2c965bfc333fe27d8d3e76a386f7f8854d21a9165e2",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    },
+    {
+      "capability": "V",
+      "frame": 4,
+      "event": 13,
+      "source": "02_附录图与轨迹/full_trajectories/V/frames/004_event_013_physical.png",
+      "source_sha256": "205dcc03a571b47df4cd47a4c0012020ab6d6a473f0a323700cd8064992f1d8e",
+      "image": "assets/episodes/v-004.webp",
+      "image_sha256": "8edbcfcaca2b8b12dbd53800c811fa7bcb181e02318fd4e11629c160952723e6",
+      "encoding": "lossless WebP; 1080x720; no crop"
+    }
+  ]
+}

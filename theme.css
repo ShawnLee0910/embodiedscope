@@ -1,0 +1,124 @@
+/* Shared text and control colors; authored figures keep their original colors. */
+:root {
+  color-scheme:dark;
+  --faint:#8aa2b3;
+  --control-line:#607888;
+  --selected-bg:#183142;
+  --media-bg:#070e14;
+  --bar-neutral:#8198ad;
+}
+:root[data-theme=light] {
+  color-scheme:light;
+  --faint:#506575;
+  --blue:#246795;
+  --orange:#97501f;
+  --violet:#674795;
+  --green:#20664f;
+  --on-button:#ffffff;
+  --control-line:#758996;
+  --selected-bg:#dfeaf1;
+  --media-bg:#dce7ee;
+  --bar-neutral:#647b8d;
+}
+
+/* Control outlines remain identifiable on both page and card surfaces. */
+select,.icon-button,.button-outline,.run-jumps a,
+.metric-buttons button:not([aria-pressed=true]),
+.scene-mode button:not([aria-pressed=true]),
+.scene-detail-tabs button:not([aria-pressed=true]),
+.keyframe-steps button:not([aria-current=step]),
+.keyframe-navigation>button:not(:disabled),
+.overview-capabilities button:not([aria-pressed=true]) {
+  border-color:var(--control-line);
+}
+select option { background:var(--panel-raised); color:var(--ink); }
+.icon-button:hover,.button-outline:hover,.run-jumps a:hover { border-color:var(--blue); }
+.capability-tab[aria-selected=true] { background:var(--selected-bg); }
+.overview-capabilities button[aria-pressed=true],
+.keyframe-steps button[aria-current=step] {
+  background:var(--selected-bg);
+  border-color:var(--example-accent,var(--blue));
+}
+.level-tag { border-color:var(--blue); }
+.tier-one .level-tag { border-color:var(--violet); }
+.tier-two .level-tag { border-color:var(--orange); }
+.bar-l0 { background:var(--bar-neutral); }
+.research-scatter text { stroke:none; }
+.scene-video-frame,.scene-video-frame video,.scene-detail-image,
+.overview-world>img,.observation-frame { background:var(--media-bg); }
+.intro-topline>span>span { color:#a4d1ff; }
+:root[data-theme=light] ::selection { background:#bdd9ed; color:#172e40; }
+:root[data-theme=light] dialog::backdrop { background:#152c4270; }
+
+/* The light opening matches the 3D scene's light studio background. */
+:root[data-theme=light] .intro-track { background:#edf3f7; color:var(--ink); }
+:root[data-theme=light] .intro-pin {
+  background:radial-gradient(ellipse at 72% 48%,#c2d8e84d,transparent 64%),#edf3f7;
+}
+:root[data-theme=light] .intro-shade {
+  background:linear-gradient(0deg,#edf3f7 0%,#edf3f7d9 19%,transparent 45%,transparent 90%,#edf3f7a6),linear-gradient(90deg,#edf3f7f0 0%,#edf3f7d6 30%,#edf3f742 57%,transparent 75%);
+}
+:root[data-theme=light] .intro-topline,
+:root[data-theme=light] .intro-topline a,
+:root[data-theme=light] .story-scroll { color:var(--muted); }
+:root[data-theme=light] .intro-topline a { border-color:var(--control-line); }
+:root[data-theme=light] .intro-topline>span>span { color:var(--blue); }
+:root[data-theme=light] .intro-topline a:hover { color:var(--blue); }
+:root[data-theme=light] .story-caption h2 { color:var(--ink); }
+:root[data-theme=light] .story-caption p { color:var(--muted); }
+:root[data-theme=light] .story-caption strong,
+:root[data-theme=light] .story-caption .chapter-kicker { color:var(--blue); }
+:root[data-theme=light] [data-story-chapter="2"] strong,
+:root[data-theme=light] [data-story-chapter="2"] .chapter-kicker { color:var(--violet); }
+:root[data-theme=light] [data-story-chapter="3"] strong,
+:root[data-theme=light] [data-story-chapter="3"] .chapter-kicker { color:var(--orange); }
+:root[data-theme=light] [data-story-chapter="4"] strong,
+:root[data-theme=light] [data-story-chapter="4"] .chapter-kicker { color:var(--green); }
+:root[data-theme=light] .scroll-mouse { border-color:var(--muted); }
+:root[data-theme=light] .scroll-mouse::after { background:var(--blue); }
+:root[data-theme=light] .title-sheet h1,
+:root[data-theme=light] .title-sheet h1>span:first-child { color:var(--ink); }
+:root[data-theme=light] .title-sheet h1>span:last-child {
+  background:linear-gradient(110deg,#205d8c 5%,#426285 65%,#925025 100%);
+  background-clip:text;
+  -webkit-background-clip:text;
+  color:transparent;
+}
+:root[data-theme=light] .title-sheet .paper-name { color:var(--ink); }
+:root[data-theme=light] .title-sheet .authors a { color:var(--blue); }
+:root[data-theme=light] .title-sheet .authors sup,
+:root[data-theme=light] .title-sheet .affiliations { color:var(--muted); }
+:root[data-theme=light] .title-sheet .author-notes,
+:root[data-theme=light] .title-actions small,
+:root[data-theme=light] .title-endnote,
+:root[data-theme=light] .title-endnote button { color:var(--faint); }
+:root[data-theme=light] .title-actions .release-chip {
+  background:var(--panel-raised); color:var(--ink); border-color:var(--control-line);
+}
+:root[data-theme=light] .title-actions a {
+  background:var(--blue); border-color:var(--blue); color:var(--on-button);
+  box-shadow:0 4px 20px #24679514;
+}
+:root[data-theme=light] .title-actions a:hover { background:#1f577f; border-color:#1f577f; }
+:root[data-theme=light] .title-endnote a { border-color:var(--control-line); }
+:root[data-theme=light] .title-endnote a:hover,
+:root[data-theme=light] .title-endnote button:hover { color:var(--blue); }
+:root[data-theme=light] .story-rail button { color:var(--faint); }
+:root[data-theme=light] .story-rail [data-story-to="1"] { --step-color:var(--blue); }
+:root[data-theme=light] .story-rail [data-story-to="2"] { --step-color:var(--violet); }
+:root[data-theme=light] .story-rail [data-story-to="3"] { --step-color:var(--orange); }
+:root[data-theme=light] .story-rail [data-story-to="4"] { --step-color:var(--green); }
+:root[data-theme=light] .story-rail button:hover { background:var(--selected-bg); color:var(--ink); }
+:root[data-theme=light] .story-rail button.is-active {
+  background:var(--selected-bg); color:var(--step-color,var(--blue));
+  border-color:var(--step-color,var(--blue)); box-shadow:none;
+}
+:root[data-theme=light] .story-rail .story-rail-divider { background:var(--control-line); }
+:root[data-theme=light] .story-progress { background:var(--line); }
+:root[data-theme=light] .story-progress-fill { background:linear-gradient(90deg,var(--blue),var(--orange)); }
+
+@media(max-width:700px) {
+  :root[data-theme=light] .intro-shade {
+    background:linear-gradient(0deg,#edf3f7 0%,#edf3f7f2 24%,#edf3f766 51%,transparent 70%);
+  }
+}

@@ -10,6 +10,7 @@
   let pausedByViewer = false;
   let automaticPause = false;
   let playAttempt = false;
+  let wallVisible = true;
   const automaticPlaybackAllowed = () => !reducedMotion.matches && !connection?.saveData;
 
   function updateToggle() {
@@ -31,7 +32,7 @@
   }
 
   function updatePlayback() {
-    if (!inView || document.hidden) {
+    if (!wallVisible || !inView || document.hidden) {
       pauseVideo();
       return;
     }
@@ -81,6 +82,10 @@
   }
 
   document.addEventListener('visibilitychange', updatePlayback);
+  document.addEventListener('sceneviewchange', (event) => {
+    wallVisible = event.detail.wallVisible;
+    updatePlayback();
+  });
   reducedMotion.addEventListener('change', () => {
     if (reducedMotion.matches) pauseVideo();
     else updatePlayback();

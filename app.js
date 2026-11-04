@@ -1,24 +1,50 @@
 /* Original RoboWeave homepage. Research interactions. No analytics. */
 (() => {
   'use strict';
-  const data = window.ROBO_WEAVE_DATA;
-  if (!data) return;
   const $ = (selector) => document.querySelector(selector);
   const root = document.documentElement;
   const readPreference = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
   const savePreference = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Private browsing is supported. */ } };
+  const themePreference = (value) => value === 'light' || value === 'dark' ? value : null;
+  const systemTheme = matchMedia('(prefers-color-scheme: dark)');
+  const themeButton = $('#theme-toggle');
+  let preferredTheme = themePreference(readPreference('roboweave-theme'));
+  const effectiveTheme = () => preferredTheme || (systemTheme.matches ? 'dark' : 'light');
   const setTheme = (theme) => {
     root.dataset.theme = theme;
+    root.style.colorScheme = theme;
     const next = theme === 'dark' ? 'light' : 'dark';
-    $('#theme-toggle').setAttribute('aria-label', `Switch to ${next} theme`);
-    $('meta[name="theme-color"]').content = theme === 'dark' ? '#081116' : '#f2f6f7';
+    const label = `Switch to ${next} theme`;
+    if (themeButton) {
+      themeButton.setAttribute('aria-label', label);
+      themeButton.title = label;
+      themeButton.innerHTML = next === 'light'
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.1A8.6 8.6 0 0 1 9.9 3.5 8.7 8.7 0 1 0 20.5 14.1Z"/></svg>';
+    }
+    const themeColor = $('meta[name="theme-color"]');
+    if (themeColor) themeColor.content = theme === 'dark' ? '#081116' : '#f2f6f7';
   };
-  setTheme(readPreference('roboweave-theme') === 'light' ? 'light' : 'dark');
-  $('#theme-toggle').addEventListener('click', () => { const theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(theme); savePreference('roboweave-theme', theme); });
+  setTheme(effectiveTheme());
+  themeButton?.addEventListener('click', () => {
+    preferredTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    setTheme(preferredTheme);
+    savePreference('roboweave-theme', preferredTheme);
+  });
+  systemTheme.addEventListener('change', () => { if (!preferredTheme) setTheme(effectiveTheme()); });
+  addEventListener('storage', (event) => {
+    // Ignore session-storage notifications and unrelated application preferences.
+    try { if (event.storageArea && event.storageArea !== localStorage) return; } catch { return; }
+    if (event.key !== 'roboweave-theme' && event.key !== null) return;
+    preferredTheme = themePreference(event.key === null ? null : event.newValue);
+    setTheme(effectiveTheme());
+  });
+
+  const data = window.ROBO_WEAVE_DATA;
+  if (!data) return;
 
   const tabs = [...document.querySelectorAll('[data-cap]')];
   let currentCapability = 'A';
-  const episodeImage = $('#episode-image');
   function selectCapability(key, focus = false) {
     const cap = data.capabilities[key];
     if (!cap) return;
@@ -30,11 +56,7 @@
     $('#episode-description').textContent = cap.description;
     $('#episode-demand').textContent = cap.demand;
     $('#episode-media-label').textContent = cap.label;
-    episodeImage.src = cap.image;
-    episodeImage.alt = cap.alt;
-    episodeImage.width = cap.width;
-    episodeImage.height = cap.height;
-    $('#episode-scroll').scrollTop = 0;
+    document.dispatchEvent(new CustomEvent('capabilitychange', {detail:{capability:key}}));
   }
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => selectCapability(tab.dataset.cap));
