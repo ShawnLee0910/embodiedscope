@@ -9,7 +9,7 @@
       let theme;
       try { theme = localStorage.getItem('roboweave-theme'); } catch { /* Storage is optional. */ }
       if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        theme = 'dark';
       }
       document.documentElement.dataset.theme = theme;
       document.documentElement.style.colorScheme = theme;
@@ -43,7 +43,7 @@
   <script src="data.js?v=20261030" defer></script>
   <script src="content.js?v=20261030" defer></script>
   <script src="stories.js?v=20261103-polish" defer></script>
-  <script src="app.js?v=20261103-theme" defer></script>
+  <script src="app.js?v=20261104-default-dark" defer></script>
   <script src="research.js?v=20261030" defer></script>
   <script src="scenes.js?v=20261103-polish" defer></script>
   <script src="experience.js?v=20261103-polish" defer></script>

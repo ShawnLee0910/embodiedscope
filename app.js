@@ -6,10 +6,9 @@
   const readPreference = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
   const savePreference = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Private browsing is supported. */ } };
   const themePreference = (value) => value === 'light' || value === 'dark' ? value : null;
-  const systemTheme = matchMedia('(prefers-color-scheme: dark)');
   const themeButton = $('#theme-toggle');
   let preferredTheme = themePreference(readPreference('roboweave-theme'));
-  const effectiveTheme = () => preferredTheme || (systemTheme.matches ? 'dark' : 'light');
+  const effectiveTheme = () => preferredTheme || 'dark';
   const setTheme = (theme) => {
     root.dataset.theme = theme;
     root.style.colorScheme = theme;
@@ -31,7 +30,6 @@
     setTheme(preferredTheme);
     savePreference('roboweave-theme', preferredTheme);
   });
-  systemTheme.addEventListener('change', () => { if (!preferredTheme) setTheme(effectiveTheme()); });
   addEventListener('storage', (event) => {
     // Ignore session-storage notifications and unrelated application preferences.
     try { if (event.storageArea && event.storageArea !== localStorage) return; } catch { return; }
