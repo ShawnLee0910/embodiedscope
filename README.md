@@ -16,6 +16,8 @@ Static HTML, CSS and JavaScript. GitHub Pages publishes the repository root on `
 
 The opening is a scroll-directed 3D introduction: the camera pulls back and orbits, two solid blue/orange ribbons form around the RoboWeave robot, four capability paths arrive, and the scene gives way to the title and authors. Scroll backward to reverse the sequence. Chapter controls, Skip intro, and Replay intro provide direct navigation. It animates only in response to scrolling, and stops rendering off screen. Reduced-motion and unavailable/lost WebGL contexts show the complete static title page instead.
 
+The Scenes section follows the introduction and statistics. Its 40-second row-scrolling household showcase is a web-encoded copy of the author-provided video (1080p H.264, muted, with a static poster). The video has no native controls or timeline; a separate Play/Pause button and View larger link sit below the footage. View larger opens fullscreen or the video directly. The video loads near the section, plays while visible, and pauses off screen or in a background tab. Reduced-motion and data-saving preferences disable automatic playback. Manual pauses are preserved when scrolling away and back. The source recording is retained outside the repository.
+
 `src/intro-scene.js` is the original scene source; `intro.js` is its bundled browser build with Three.js 0.187.0. See `THIRD_PARTY_LICENSES.txt`. The existing logo was recreated as procedural geometry for this introduction; no EmbodiedSWE animation frames or research media are redistributed.
 
 Only when editing the 3D scene, run `npm ci` followed by `npm run build:intro`, and commit the updated source and bundled `intro.js` together. Ordinary HTML/CSS changes need no build.

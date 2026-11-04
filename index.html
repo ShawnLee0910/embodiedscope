@@ -24,18 +24,20 @@
   <link rel="stylesheet" href="style.css?v=20261030">
   <link rel="stylesheet" href="research.css?v=20261030-2">
   <link rel="stylesheet" href="cinematic.css?v=20261030-4">
-  <script src="intro.js?v=20261030-4" defer></script>
+  <link rel="stylesheet" href="scenes.css?v=20261102">
+  <script src="intro.js?v=20261103-smooth" defer></script>
   <script src="data.js?v=20261030" defer></script>
   <script src="content.js?v=20261030" defer></script>
-  <script src="app.js?v=20261030-2" defer></script>
+  <script src="app.js?v=20261101" defer></script>
   <script src="research.js?v=20261030" defer></script>
+  <script src="scenes.js?v=20261102" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#overview">Skip to content</a>
   <header class="topbar">
     <nav class="nav wrap" aria-label="Main navigation">
       <a class="brand" href="#home" aria-label="RoboWeave home"><img src="assets/brand/roboweave.png" width="54" height="36" alt=""><span>Robo<span class="brand-accent">Weave</span></span></a>
-      <div class="nav-links"><a href="#overview">Overview</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#real-robot">Real robot</a><a href="#resources">Resources</a></div>
+      <div class="nav-links"><a href="#scenes">Scenes</a><a href="#overview">Overview</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#real-robot">Real robot</a><a href="#resources">Resources</a></div>
       <div class="nav-actions">
         <button id="theme-toggle" class="icon-button" type="button" aria-label="Switch to light theme" title="Switch theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button>
         <a class="button button-small" href="#episodes">Task gallery <span aria-hidden="true">↓</span></a>
@@ -78,6 +80,28 @@
     </section>
 
     <div class="stats-band"><dl class="stats wrap"><div><dt>240</dt><dd>Interactive household tasks</dd></div><div><dt>4</dt><dd>Agentic capabilities</dd></div><div><dt>3</dt><dd>Levels of integration</dd></div><div><dt>20</dt><dd>Shared action primitives</dd></div></dl></div>
+
+    <section class="scene-section" id="scenes" aria-labelledby="scenes-title">
+      <div class="wrap">
+        <div class="section-kicker"><span>SCENE SHOWCASE</span><span class="tiny-label">EVERYDAY SPACES, EMBODIED TASKS</span></div>
+        <div class="section-heading scene-heading">
+          <h2 id="scenes-title">A world of everyday spaces.</h2>
+          <p>Kitchens, living areas, bedrooms, and workspaces. Explore the household environments behind RoboWeave.</p>
+        </div>
+      </div>
+      <figure class="scene-player">
+        <div class="scene-video-frame">
+          <video id="scene-video" muted loop playsinline preload="none" width="1920" height="1080" poster="assets/scenes/scene-showcase-poster.webp" data-src="assets/scenes/scene-showcase.mp4" aria-label="RoboWeave scene showcase: four rows of household environments scroll horizontally, showing robots interacting with their surroundings." aria-describedby="scene-caption">
+            <p><a href="assets/scenes/scene-showcase.mp4">Watch the scene showcase video.</a></p>
+          </video>
+        </div>
+        <figcaption id="scene-caption" class="scene-caption">
+          <p>HOUSEHOLD ENVIRONMENTS <span aria-hidden="true">·</span> <span>Accelerated playback</span></p>
+          <div class="scene-actions"><span>40-second loop</span><button id="scene-toggle" type="button" aria-controls="scene-video" aria-label="Play scene showcase">Play</button><a href="assets/scenes/scene-showcase.mp4" target="_blank" rel="noopener" id="scene-expand">View larger <span aria-hidden="true">↗</span></a></div>
+        </figcaption>
+      </figure>
+      <noscript><p class="scene-fallback wrap"><a href="assets/scenes/scene-showcase.mp4">Play the scene showcase video ↗</a></p></noscript>
+    </section>
 
     <section class="section wrap" id="overview" aria-labelledby="overview-title">
       <div class="section-kicker"><span>OVERVIEW</span><span class="tiny-label">SUSTAINED EMBODIED AGENCY</span></div>

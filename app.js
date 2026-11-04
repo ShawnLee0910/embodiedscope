@@ -81,7 +81,7 @@
     const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); reveal.unobserve(entry.target); } }), {threshold:0.08});
     document.querySelectorAll('.reveal').forEach((element) => reveal.observe(element));
     const navObserver = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { document.querySelectorAll('.nav-links a').forEach((link) => { if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }); } }), {rootMargin:'-15% 0px -55% 0px'});
-    ['overview','benchmark','episodes','results','real-robot','resources'].forEach((id) => navObserver.observe(document.getElementById(id)));
+    ['scenes','overview','benchmark','episodes','results','real-robot','resources'].forEach((id) => navObserver.observe(document.getElementById(id)));
   }
   let scrollPending = false;
   function updateProgress() { const total = root.scrollHeight - innerHeight; $('#reading-progress').style.transform = `scaleX(${total > 0 ? Math.min(1,scrollY/total) : 0})`; scrollPending = false; }

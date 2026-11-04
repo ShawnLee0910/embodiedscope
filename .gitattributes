@@ -1,4 +1,5 @@
 *.png binary
 *.webp binary
 *.pdf binary
+*.mp4 binary
 intro.js -whitespace linguist-generated=true

@@ -1,0 +1,32 @@
+/* Scene footage keeps its full composition at every screen size. */
+.scene-section{padding:66px 0 22px;scroll-margin-top:76px}
+.scene-heading{align-items:flex-start;margin-bottom:29px;gap:40px}
+.scene-heading h2{max-width:560px}
+.scene-heading>p{max-width:390px}
+.scene-player{width:min(1360px,calc(100% - 64px));margin:0 auto}
+.scene-video-frame{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#070e14;box-shadow:0 16px 60px #00000018;aspect-ratio:16/9}
+.scene-video-frame video{display:block;width:100%;height:100%;object-fit:contain;background:#070e14}
+.scene-video-frame video:fullscreen{object-fit:contain}
+.scene-caption{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 3px 0;font-size:11px;line-height:1.65;color:var(--muted)}
+.scene-caption p{font:10px var(--mono);letter-spacing:.1em}
+.scene-caption p>span:last-child{font:11px var(--sans);letter-spacing:0}
+.scene-caption p>span:first-child{padding-inline:10px;color:var(--faint)}
+.scene-actions{display:flex;align-items:center;gap:24px;white-space:nowrap}
+.scene-actions>a,.scene-actions>button{display:inline-flex;gap:12px;align-items:center;color:var(--ink);background:transparent;padding:5px 0;border:0;border-bottom:1px solid var(--line);font-size:12px}
+.scene-actions>a:hover,.scene-actions>button:hover{border-color:var(--blue);color:var(--blue)}
+.scene-fallback{padding-top:10px;font-size:13px}
+@media(max-width:1100px) and (min-width:701px){.nav-links a{padding-inline:9px}}
+@media(max-width:700px){
+  .scene-section{padding:48px 0 15px}
+  .scene-heading{margin-bottom:22px}
+  .scene-heading h2{font-size:29px}
+  .scene-heading>p{max-width:100%;margin-top:15px}
+  .scene-player{width:calc(100% - 24px)}
+  .scene-video-frame{border-radius:9px}
+  .scene-caption{align-items:flex-start;flex-direction:column;gap:7px;padding:12px 8px 0}
+  .scene-caption p{font-size:8px;letter-spacing:.06em}
+  .scene-caption p>span:last-child{font-size:10px}
+  .scene-caption p>span:first-child{padding-inline:5px}
+  .scene-actions{width:100%;justify-content:space-between;font-size:10px;gap:12px}
+  .scene-actions>a,.scene-actions>button{font-size:11px}
+}

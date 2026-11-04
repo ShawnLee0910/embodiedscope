@@ -6,6 +6,7 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {FXAAPass} from 'three/addons/postprocessing/FXAAPass.js';
 
 const stage = document.querySelector('.intro-track');
 const pin = stage?.querySelector('.intro-pin');
@@ -60,15 +61,15 @@ function start() {
   const robot = new THREE.Group();
   scene.add(robot);
   function rounded(parent,size,position,material,radius=.14) {
-    const mesh = new THREE.Mesh(new RoundedBoxGeometry(...size,5,radius),material);
+    const mesh = new THREE.Mesh(new RoundedBoxGeometry(...size,10,radius),material);
     mesh.position.set(...position); parent.add(mesh); return mesh;
   }
   function ellipsoid(parent,scale,position,material) {
-    const mesh = new THREE.Mesh(new THREE.SphereGeometry(1,48,32),material);
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(1,64,48),material);
     mesh.scale.set(...scale);mesh.position.set(...position);parent.add(mesh);return mesh;
   }
   function cylinder(parent,radius,length,position,material) {
-    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,48),material);
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,80),material);
     mesh.position.set(...position);parent.add(mesh);return mesh;
   }
   const torso = rounded(robot,[1.16,1.04,.72],[0,.16,0],navy,.22);
@@ -193,10 +194,22 @@ function start() {
   const starGeometry = new THREE.BufferGeometry();starGeometry.setAttribute('position',new THREE.BufferAttribute(starPositions,3));
   const stars=new THREE.Points(starGeometry,new THREE.PointsMaterial({color:0x8fb8df,size:.014,transparent:true,opacity:.50,sizeAttenuation:true}));scene.add(stars);
 
-  const composer = new EffectComposer(renderer);
+  // Canvas antialiasing does not cover the offscreen buffers used by bloom.
+  const gl = renderer.getContext();
+  const colorSamples = gl.getInternalformatParameter(gl.RENDERBUFFER, gl.RGBA16F, gl.SAMPLES) ?? [];
+  const depthSamples = gl.getInternalformatParameter(gl.RENDERBUFFER, gl.DEPTH_COMPONENT24, gl.SAMPLES) ?? [];
+  const supportedSamples = Array.from(colorSamples).filter(samples => samples <= 4 && depthSamples.includes(samples));
+  const samples = Math.max(0, ...supportedSamples);
+  const renderTarget = new THREE.WebGLRenderTarget(1, 1, {
+    type: THREE.HalfFloatType,
+    samples,
+    resolveDepthBuffer: false,
+  });
+  const composer = new EffectComposer(renderer, renderTarget);
   composer.addPass(new RenderPass(scene,camera));
   const bloom = new UnrealBloomPass(new THREE.Vector2(1,1),.14,.38,2.1);composer.addPass(bloom);
   composer.addPass(new OutputPass());
+  if (samples < 2) composer.addPass(new FXAAPass());
   stage.classList.remove('story-static');stage.classList.add('story-live');
   const captions=[...stage.querySelectorAll('[data-story-chapter]')];
   const chapterButtons=[...stage.querySelectorAll('[data-story-to]')];
@@ -293,13 +306,23 @@ function start() {
   function requestDraw(){if(!raf&&active&&visible&&!document.hidden)raf=requestAnimationFrame(tick);}
   function update(){const rect=stage.getBoundingClientRect();const track=rect.height-pin.offsetHeight;target=track>0?clamp((offsetTop()-rect.top)/track):1;requestDraw();}
   function resize(){
-    mobile=innerWidth<700;
-    const width=pin.clientWidth,height=pin.clientHeight;
-    // Keep the drawing buffers bounded on large, high-density displays.
-    const pixelRatio=Math.min(devicePixelRatio||1,mobile?1.25:1.5,Math.sqrt(1800000/Math.max(1,width*height)));
-    renderer.setPixelRatio(pixelRatio);composer.setPixelRatio(pixelRatio);
-    renderer.setSize(width,height,false);composer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();
-    update();draw(current);
+    mobile = innerWidth < 700;
+    const width = pin.clientWidth;
+    const height = pin.clientHeight;
+    if (!width || !height) return;
+    // Retain native CSS resolution, with denser sampling on high-DPI screens.
+    const pixelBudget = mobile ? 1800000 : 4000000;
+    const budgetRatio = Math.max(1, Math.sqrt(pixelBudget / (width * height)));
+    const pixelRatio = Math.min(Math.max(1, devicePixelRatio || 1), 2, budgetRatio);
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(width, height, false);
+    // Keep MSAA, bloom, and the fallback filter at the same resolution.
+    composer.setSize(width, height);
+    composer.setPixelRatio(pixelRatio);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    update();
+    draw(current);
   }
   function scrollToProgress(p){const rect=stage.getBoundingClientRect();scrollTo({top:scrollY+rect.top-offsetTop()+(rect.height-pin.offsetHeight)*p,behavior:reduced.matches?'auto':'smooth'});}
   const jumpPositions=[0,.19,.365,.54,.695,.985];
